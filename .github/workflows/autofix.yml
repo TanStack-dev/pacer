@@ -16,6 +16,8 @@ jobs:
   autofix:
     name: autofix
     runs-on: ubuntu-latest
+    # Add this condition to skip in forks
+    if: github.repository_owner == 'TanStack'
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
