@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-02T04:12:58.005Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:06:43.638Z'
 id: createThrottledSignal
 title: createThrottledSignal
 ---
@@ -10,7 +10,7 @@ title: createThrottledSignal
 # Function: createThrottledSignal()
 
 ```ts
-function createThrottledSignal<TValue>(value, initialOptions): [Accessor<TValue>, Setter<TValue>, SolidThrottler<Setter<TValue>, [Accessor<TValue>]>]
+function createThrottledSignal<TValue>(value, initialOptions): [Accessor<TValue>, Setter<TValue>, SolidThrottler<Setter<TValue>>]
 ```
 
 Defined in: [throttler/createThrottledSignal.ts:41](https://github.com/TanStack/pacer/blob/main/packages/solid-pacer/src/throttler/createThrottledSignal.ts#L41)
@@ -41,11 +41,11 @@ consider using the lower-level createThrottler hook instead.
 
 ### initialOptions
 
-`ThrottlerOptions`\<`Setter`\<`TValue`\>, \[`Accessor`\<`TValue`\>\]\>
+`ThrottlerOptions`\<`Setter`\<`TValue`\>\>
 
 ## Returns
 
-\[`Accessor`\<`TValue`\>, `Setter`\<`TValue`\>, [`SolidThrottler`](../interfaces/solidthrottler.md)\<`Setter`\<`TValue`\>, \[`Accessor`\<`TValue`\>\]\>\]
+\[`Accessor`\<`TValue`\>, `Setter`\<`TValue`\>, [`SolidThrottler`](../interfaces/solidthrottler.md)\<`Setter`\<`TValue`\>\>\]
 
 ## Example
 

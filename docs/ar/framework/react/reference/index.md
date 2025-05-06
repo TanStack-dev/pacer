@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-06T01:59:58.000Z'
-translation-updated-at: '2025-05-02T04:38:02.158Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:20:00.347Z'
 id: '@tanstack/react-pacer'
 title: '@tanstack/react-pacer'
 ---
@@ -12,16 +12,17 @@ title: '@tanstack/react-pacer'
 ## Functions
 
 - [useAsyncDebouncer](functions/useasyncdebouncer.md)
+- [useAsyncQueuedState](functions/useasyncqueuedstate.md)
 - [useAsyncQueuer](functions/useasyncqueuer.md)
-- [useAsyncQueuerState](functions/useasyncqueuerstate.md)
 - [useAsyncRateLimiter](functions/useasyncratelimiter.md)
 - [useAsyncThrottler](functions/useasyncthrottler.md)
 - [useDebouncedCallback](functions/usedebouncedcallback.md)
 - [useDebouncedState](functions/usedebouncedstate.md)
 - [useDebouncedValue](functions/usedebouncedvalue.md)
 - [useDebouncer](functions/usedebouncer.md)
+- [useQueuedState](functions/usequeuedstate.md)
+- [useQueuedValue](functions/usequeuedvalue.md)
 - [useQueuer](functions/usequeuer.md)
-- [useQueuerState](functions/usequeuerstate.md)
 - [useRateLimitedCallback](functions/useratelimitedcallback.md)
 - [useRateLimitedState](functions/useratelimitedstate.md)
 - [useRateLimitedValue](functions/useratelimitedvalue.md)

@@ -7,7 +7,7 @@
   },
   "sections": [
     {
-      "label": "入門指南",
+      "label": "開始使用",
       "children": [
         {
           "label": "概述",
@@ -111,7 +111,7 @@
           "to": "reference/interfaces/asyncdebounceroptions"
         },
         {
-          "label": "防抖 (debounce)",
+          "label": "防抖",
           "to": "reference/functions/debounce"
         },
         {
@@ -190,7 +190,7 @@
           "to": "reference/interfaces/asyncthrottleroptions"
         },
         {
-          "label": "節流 (throttle)",
+          "label": "節流",
           "to": "reference/functions/throttle"
         },
         {
@@ -269,11 +269,11 @@
           "to": "reference/interfaces/asyncratelimiteroptions"
         },
         {
-          "label": "速率限制 (rateLimit)",
+          "label": "速率限制",
           "to": "reference/functions/ratelimit"
         },
         {
-          "label": "非同步速率限制 (asyncRateLimit)",
+          "label": "非同步速率限制",
           "to": "reference/functions/asyncratelimit"
         },
         {
@@ -365,7 +365,7 @@
               "to": "framework/react/reference/functions/usequeuer"
             },
             {
-              "label": "useQueuerState",
+              "label": "useQueuedState",
               "to": "framework/react/reference/functions/usequeuerstate"
             },
             {
@@ -401,11 +401,11 @@
           "label": "react",
           "children": [
             {
-              "label": "防抖 (debounce)",
+              "label": "防抖",
               "to": "framework/react/examples/debounce"
             },
             {
-              "label": "非同步防抖 (asyncDebounce)",
+              "label": "非同步防抖",
               "to": "framework/react/examples/asyncDebounce"
             },
             {
@@ -434,11 +434,11 @@
           "label": "solid",
           "children": [
             {
-              "label": "防抖 (debounce)",
+              "label": "防抖",
               "to": "framework/solid/examples/debounce"
             },
             {
-              "label": "非同步防抖 (asyncDebounce)",
+              "label": "非同步防抖",
               "to": "framework/solid/examples/asyncDebounce"
             },
             {
@@ -469,11 +469,11 @@
           "label": "react",
           "children": [
             {
-              "label": "節流 (throttle)",
+              "label": "節流",
               "to": "framework/react/examples/throttle"
             },
             {
-              "label": "非同步節流 (asyncThrottle)",
+              "label": "非同步節流",
               "to": "framework/react/examples/asyncThrottle"
             },
             {
@@ -502,11 +502,11 @@
           "label": "solid",
           "children": [
             {
-              "label": "節流 (throttle)",
+              "label": "節流",
               "to": "framework/solid/examples/throttle"
             },
             {
-              "label": "非同步節流 (asyncThrottle)",
+              "label": "非同步節流",
               "to": "framework/solid/examples/asyncThrottle"
             },
             {
@@ -537,11 +537,11 @@
           "label": "react",
           "children": [
             {
-              "label": "速率限制 (rateLimit)",
+              "label": "速率限制",
               "to": "framework/react/examples/rateLimit"
             },
             {
-              "label": "非同步速率限制 (asyncRateLimit)",
+              "label": "非同步速率限制",
               "to": "framework/react/examples/asyncRateLimit"
             },
             {
@@ -570,11 +570,11 @@
           "label": "solid",
           "children": [
             {
-              "label": "速率限制 (rateLimit)",
+              "label": "速率限制",
               "to": "framework/solid/examples/rateLimit"
             },
             {
-              "label": "非同步速率限制 (asyncRateLimit)",
+              "label": "非同步速率限制",
               "to": "framework/solid/examples/asyncRateLimit"
             },
             {
@@ -605,7 +605,7 @@
           "label": "react",
           "children": [
             {
-              "label": "佇列 (queue)",
+              "label": "佇列",
               "to": "framework/react/examples/queue"
             },
             {
@@ -613,16 +613,20 @@
               "to": "framework/react/examples/useQueuer"
             },
             {
-              "label": "useQueuerState",
-              "to": "framework/react/examples/useQueuerState"
+              "label": "useQueuedState",
+              "to": "framework/react/examples/useQueuedState"
+            },
+            {
+              "label": "useQueuedValue",
+              "to": "framework/react/examples/useQueuedValue"
             },
             {
               "label": "useAsyncQueuer",
               "to": "framework/react/examples/useAsyncQueuer"
             },
             {
-              "label": "useAsyncQueuerState",
-              "to": "framework/react/examples/useAsyncQueuerState"
+              "label": "useAsyncQueuedState",
+              "to": "framework/react/examples/useAsyncQueuedState"
             }
           ]
         },
@@ -630,7 +634,7 @@
           "label": "solid",
           "children": [
             {
-              "label": "佇列 (queue)",
+              "label": "佇列",
               "to": "framework/solid/examples/queue"
             },
             {
@@ -640,6 +644,29 @@
             {
               "label": "createAsyncQueuer",
               "to": "framework/solid/examples/createAsyncQueuer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "進階範例",
+      "children": [],
+      "frameworks": [
+        {
+          "label": "react",
+          "children": [
+            {
+              "label": "React Query 防抖預取",
+              "to": "framework/react/examples/react-query-debounced-prefetch"
+            },
+            {
+              "label": "React Query 節流預取",
+              "to": "framework/react/examples/react-query-throttled-prefetch"
+            },
+            {
+              "label": "React Query 佇列預取",
+              "to": "framework/react/examples/react-query-queued-prefetch"
             }
           ]
         }

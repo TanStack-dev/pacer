@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-02T04:23:11.864Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:04:17.836Z'
 id: useAsyncQueuer
 title: useAsyncQueuer
 ---
@@ -13,7 +13,7 @@ title: useAsyncQueuer
 function useAsyncQueuer<TValue>(options): AsyncQueuer<TValue>
 ```
 
-Defined in: [async-queuer/useAsyncQueuer.ts:55](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/async-queuer/useAsyncQueuer.ts#L55)
+Defined in: [react-pacer/src/async-queuer/useAsyncQueuer.ts:55](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/async-queuer/useAsyncQueuer.ts#L55)
 
 A lower-level React hook that creates an `AsyncQueuer` instance for managing an async queue of items.
 

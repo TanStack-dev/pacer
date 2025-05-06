@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T12:27:47.000Z'
-translation-updated-at: '2025-05-02T04:31:18.806Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:14:29.485Z'
 title: Asynchrone Warteschlangen-Anleitung
 id: async-queueing
 ---
@@ -15,18 +15,18 @@ Asynchrones Queueing erweitert das grundlegende Queueing-Konzept durch die Hinzu
 ### Visualisierung des Asynchronen Queueings
 
 ```text
-Asynchrones Queueing (Parallelität: 2, Wartezeit: 2 Ticks)
-Zeitachse: [1 Sekunde pro Tick]
-Aufrufe:     ⬇️  ⬇️  ⬇️  ⬇️     ⬇️  ⬇️     ⬇️
-Queue:      [ABC]   [C]    [CDE]    [E]    []
-Aktiv:      [A,B]   [B,C]  [C,D]    [D,E]  [E]
-Abgeschlossen: -       A      B        C      D,E
-            [=================================================================]
-            ^ Im Gegensatz zum regulären Queueing können mehrere Elemente
-              gleichzeitig verarbeitet werden
+Async Queueing (concurrency: 2, wait: 2 ticks)
+Timeline: [1 second per tick]
+Calls:        ⬇️  ⬇️  ⬇️  ⬇️     ⬇️  ⬇️     ⬇️
+Queue:       [ABC]   [C]    [CDE]    [E]    []
+Active:      [A,B]   [B,C]  [C,D]    [D,E]  [E]
+Completed:    -       A      B        C      D,E
+             [=================================================================]
+             ^ Im Gegensatz zum regulären Queueing können mehrere Elemente
+               gleichzeitig verarbeitet werden
 
-            [Elemente reihen sich ein]   [2 gleichzeitig verarbeiten]   [Alle Elemente abschließen]
-             bei Überlastung             mit Wartezeit dazwischen
+             [Elemente reihen sich ein]   [2 gleichzeitig verarbeiten]   [Alle Elemente abschließen]
+              wenn beschäftigt            mit Wartezeit dazwischen
 ```
 
 ### Wann Asynchrones Queueing verwendet werden sollte
@@ -34,8 +34,8 @@ Abgeschlossen: -       A      B        C      D,E
 Asynchrones Queueing ist besonders effektiv, wenn Sie:
 - Mehrere asynchrone Operationen parallel verarbeiten müssen
 - Die Anzahl der gleichzeitigen Operationen steuern müssen
-- Promise-basierte Aufgaben mit ordnungsgemäßer Fehlerbehandlung handhaben müssen
-- Die Reihenfolge beibehalten und gleichzeitig den Durchsatz maximieren müssen
+- Promise-basierte Aufgaben mit ordnungsgemäßer Fehlerbehandlung handhaben
+- Die Reihenfolge beibehalten und gleichzeitig den Durchsatz maximieren möchten
 - Hintergrundaufgaben verarbeiten, die parallel ausgeführt werden können
 
 Häufige Anwendungsfälle sind:
@@ -48,7 +48,7 @@ Häufige Anwendungsfälle sind:
 
 ### Wann Asynchrones Queueing nicht verwendet werden sollte
 
-Der `AsyncQueuer` ist sehr vielseitig und kann in vielen Situationen eingesetzt werden. Er ist wirklich nur dann nicht geeignet, wenn Sie nicht vorhaben, alle seine Funktionen zu nutzen. Wenn nicht alle in die Warteschlange gestellten Ausführungen durchlaufen müssen, verwenden Sie stattdessen [Throttling](../guides/throttling). Wenn Sie keine parallele Verarbeitung benötigen, verwenden Sie stattdessen [Queueing](../guides/queueing).
+Der `AsyncQueuer` ist sehr vielseitig und kann in vielen Situationen eingesetzt werden. Er ist wirklich nur dann nicht geeignet, wenn Sie nicht planen, alle seine Funktionen zu nutzen. Wenn nicht alle in der Warteschlange eingereihten Ausführungen durchlaufen müssen, verwenden Sie stattdessen [Throttling][../guides/throttling]. Wenn Sie keine parallele Verarbeitung benötigen, verwenden Sie stattdessen [Queueing][../guides/queueing].
 
 ## Asynchrones Queueing in TanStack Pacer
 
@@ -81,7 +81,7 @@ processItems(async () => {
 })
 ```
 
-Die Verwendung der `asyncQueue`-Funktion ist etwas eingeschränkt, da sie nur einen Wrapper um die `AsyncQueuer`-Klasse darstellt, der nur die `addItem`-Methode verfügbar macht. Für mehr Kontrolle über die Warteschlange verwenden Sie die `AsyncQueuer`-Klasse direkt.
+Die Verwendung der `asyncQueue`-Funktion ist etwas eingeschränkt, da sie nur ein Wrapper um die `AsyncQueuer`-Klasse ist, der nur die `addItem`-Methode verfügbar macht. Für mehr Kontrolle über die Warteschlange verwenden Sie die `AsyncQueuer`-Klasse direkt.
 
 ### Erweiterte Verwendung mit der `AsyncQueuer`-Klasse
 
@@ -96,7 +96,7 @@ const queue = new AsyncQueuer<string>({
   started: true   // Beginne sofort mit der Verarbeitung
 })
 
-// Füge Fehler- und Erfolgshandler hinzu
+// Füge Fehler- und Erfolgs-Handler hinzu
 queue.onError((error) => {
   console.error('Aufgabe fehlgeschlagen:', error)
 })
@@ -123,7 +123,7 @@ Der `AsyncQueuer` unterstützt verschiedene Warteschlangenstrategien, um untersc
 
 #### FIFO-Warteschlange (First In, First Out)
 
-FIFO-Warteschlangen verarbeiten Aufgaben in der exakten Reihenfolge ihrer Hinzufügung, was sie ideal für die Beibehaltung der Sequenz macht:
+FIFO-Warteschlangen verarbeiten Aufgaben in der exakten Reihenfolge, in der sie hinzugefügt wurden, was sie ideal für die Beibehaltung der Sequenz macht:
 
 ```ts
 const queue = new AsyncQueuer<string>({
@@ -139,7 +139,7 @@ queue.addItem(async () => 'second') // [first, second]
 
 #### LIFO-Stack (Last In, First Out)
 
-LIFO-Stacks verarbeiten die zuletzt hinzugefügten Aufgaben zuerst, was für die Priorisierung neuerer Aufgaben nützlich ist:
+LIFO-Stacks verarbeiten die zuletzt hinzugefügten Aufgaben zuerst, was nützlich ist, um neuere Aufgaben zu priorisieren:
 
 ```ts
 const stack = new AsyncQueuer<string>({
@@ -210,10 +210,10 @@ dynamicPriorityQueue.addItem(async () => {
 ```
 
 Prioritätswarteschlangen sind unerlässlich, wenn:
-- Aufgaben unterschiedliche Wichtigkeitsgrade haben
+- Aufgaben unterschiedliche Wichtigkeitsstufen haben
 - Kritische Operationen zuerst ausgeführt werden müssen
-- Sie flexible Aufgabenreihenfolgen basierend auf Priorität benötigen
-- Die Ressourcenzuteilung wichtige Aufgaben bevorzugen sollte
+- Sie flexible Aufgabenreihenfolge basierend auf Priorität benötigen
+- Die Ressourcenzuteilung wichtigen Aufgaben bevorzugen sollte
 - Die Priorität dynamisch basierend auf Aufgabeneigenschaften oder externen Faktoren bestimmt werden muss
 
 ### Fehlerbehandlung
@@ -254,24 +254,24 @@ Der `AsyncQueuer` bietet mehrere Methoden zur Überwachung und Steuerung des War
 
 ```ts
 // Warteschlangeninspektion
-queue.getPeek()           // Betrachte nächstes Element ohne Entfernung
+queue.getPeek()           // Zeige nächstes Element an, ohne es zu entfernen
 queue.getSize()          // Aktuelle Warteschlangengröße abrufen
-queue.getIsEmpty()       // Prüfen, ob Warteschlange leer ist
-queue.getIsFull()        // Prüfen, ob Warteschlange maxSize erreicht hat
-queue.getAllItems()   // Kopie aller Elemente in der Warteschlange abrufen
+queue.getIsEmpty()       // Prüfen, ob die Warteschlange leer ist
+queue.getIsFull()        // Prüfen, ob die Warteschlange maxSize erreicht hat
+queue.getAllItems()   // Kopie aller eingereihten Elemente abrufen
 queue.getActiveItems() // Aktuell verarbeitete Elemente abrufen
 queue.getPendingItems() // Auf Verarbeitung wartende Elemente abrufen
 
 // Warteschlangenmanipulation
 queue.clear()         // Alle Elemente entfernen
 queue.reset()         // Auf Anfangszustand zurücksetzen
-queue.getExecutionCount() // Anzahl verarbeiteter Elemente abrufen
+queue.getExecutionCount() // Anzahl der verarbeiteten Elemente abrufen
 
 // Verarbeitungssteuerung
-queue.start()         // Beginne mit der Verarbeitung von Elementen
+queue.start()         // Mit der Verarbeitung von Elementen beginnen
 queue.stop()          // Verarbeitung pausieren
-queue.getIsRunning()     // Prüfen, ob Warteschlange verarbeitet
-queue.getIsIdle()        // Prüfen, ob Warteschlange leer und nicht verarbeitet
+queue.getIsRunning()     // Prüfen, ob die Warteschlange verarbeitet
+queue.getIsIdle()        // Prüfen, ob die Warteschlange leer und nicht in Verarbeitung ist
 ```
 
 ### Aufgaben-Callbacks
@@ -300,7 +300,7 @@ const unsubSettled = queue.onSettled((result) => {
   }
 })
 
-// Melde Callbacks ab, wenn nicht mehr benötigt
+// Melde Callbacks ab, wenn sie nicht mehr benötigt werden
 unsubSuccess()
 unsubError()
 unsubSettled()
@@ -308,7 +308,7 @@ unsubSettled()
 
 ### Ablehnungsbehandlung
 
-Wenn eine Warteschlange ihre maximale Größe (durch die `maxSize`-Option festgelegt) erreicht, werden neue Aufgaben abgelehnt. Der `AsyncQueuer` bietet Möglichkeiten, diese Ablehnungen zu behandeln und zu überwachen:
+Wenn eine Warteschlange ihre maximale Größe (festgelegt durch die `maxSize`-Option) erreicht, werden neue Aufgaben abgelehnt. Der `AsyncQueuer` bietet Möglichkeiten, diese Ablehnungen zu behandeln und zu überwachen:
 
 ```ts
 const queue = new AsyncQueuer<string>({
@@ -352,7 +352,7 @@ const queue = new AsyncQueuer<string>({
   started: false
 })
 
-// Ändere Konfiguration
+// Konfiguration ändern
 queue.setOptions({
   concurrency: 4, // Verarbeite mehr Aufgaben gleichzeitig
   started: true // Beginne mit der Verarbeitung
@@ -390,4 +390,4 @@ console.log(queue.getPendingItems().length) // Auf Verarbeitung wartende Aufgabe
 
 ### Framework-Adapter
 
-Jeder Framework-Adapter baut bequeme Hooks und Funktionen um die asynchronen Queuer-Klassen. Hooks wie `useAsyncQueuer` oder `useAsyncQueuerState` sind kleine Wrapper, die den Boilerplate-Code in Ihrem eigenen Code für einige gängige Anwendungsfälle reduzieren können.
+Jeder Framework-Adapter baut bequeme Hooks und Funktionen um die asynchronen Queuer-Klassen. Hooks wie `useAsyncQueuer` oder `useAsyncQueuedState` sind kleine Wrapper, die den Boilerplate-Code in Ihrem eigenen Code für einige gängige Anwendungsfälle reduzieren können.

@@ -7,7 +7,7 @@
   },
   "sections": [
     {
-      "label": "البدء",
+      "label": "البداية",
       "children": [
         {
           "label": "نظرة عامة",
@@ -27,7 +27,7 @@
           "label": "react",
           "children": [
             {
-              "label": "أداة التكيف لـ React",
+              "label": "أداة التكامل مع React",
               "to": "framework/react/adapter"
             }
           ]
@@ -36,7 +36,7 @@
           "label": "solid",
           "children": [
             {
-              "label": "أداة التكيف لـ Solid",
+              "label": "أداة التكامل مع Solid",
               "to": "framework/solid/adapter"
             }
           ]
@@ -51,19 +51,19 @@
           "to": "guides/debouncing"
         },
         {
-          "label": "ديل التخفيف (Throttling)",
+          "label": "دليل التخفيف (Throttling)",
           "to": "guides/throttling"
         },
         {
-          "label": "ديل تحديد المعدل (Rate Limiting)",
+          "label": "دليل تحديد المعدل (Rate Limiting)",
           "to": "guides/rate-limiting"
         },
         {
-          "label": "ديل الطابور (Queueing)",
+          "label": "دليل الطابور (Queueing)",
           "to": "guides/queueing"
         },
         {
-          "label": "ديل الطابور غير المتزامن (Async Queueing)",
+          "label": "دليل الطابور غير المتزامن (Async Queueing)",
           "to": "guides/async-queueing"
         }
       ]
@@ -240,7 +240,7 @@
               "to": "framework/solid/reference/functions/createthrottler"
             },
             {
-              "label": "createThrottledSignal",
+              "label": "createThrottledState",
               "to": "framework/solid/reference/functions/createthrottledsignal"
             },
             {
@@ -365,7 +365,7 @@
               "to": "framework/react/reference/functions/usequeuer"
             },
             {
-              "label": "useQueuerState",
+              "label": "useQueuedState",
               "to": "framework/react/reference/functions/usequeuerstate"
             },
             {
@@ -613,16 +613,20 @@
               "to": "framework/react/examples/useQueuer"
             },
             {
-              "label": "useQueuerState",
-              "to": "framework/react/examples/useQueuerState"
+              "label": "useQueuedState",
+              "to": "framework/react/examples/useQueuedState"
+            },
+            {
+              "label": "useQueuedValue",
+              "to": "framework/react/examples/useQueuedValue"
             },
             {
               "label": "useAsyncQueuer",
               "to": "framework/react/examples/useAsyncQueuer"
             },
             {
-              "label": "useAsyncQueuerState",
-              "to": "framework/react/examples/useAsyncQueuerState"
+              "label": "useAsyncQueuedState",
+              "to": "framework/react/examples/useAsyncQueuedState"
             }
           ]
         },
@@ -640,6 +644,29 @@
             {
               "label": "createAsyncQueuer",
               "to": "framework/solid/examples/createAsyncQueuer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "أمثلة متقدمة",
+      "children": [],
+      "frameworks": [
+        {
+          "label": "react",
+          "children": [
+            {
+              "label": "الجلب المسبق مع التخلص من الارتداد في React Query",
+              "to": "framework/react/examples/react-query-debounced-prefetch"
+            },
+            {
+              "label": "الجلب المسبق مع التخفيف في React Query",
+              "to": "framework/react/examples/react-query-throttled-prefetch"
+            },
+            {
+              "label": "الجلب المسبق مع الطابور في React Query",
+              "to": "framework/react/examples/react-query-queued-prefetch"
             }
           ]
         }

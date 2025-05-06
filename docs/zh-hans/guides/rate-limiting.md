@@ -1,52 +1,52 @@
 ---
-source-updated-at: '2025-04-24T12:27:47.000Z'
-translation-updated-at: '2025-05-02T04:19:47.836Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:04:08.933Z'
 title: 限流指南
 id: rate-limiting
 ---
 # 速率限制 (Rate Limiting) 指南
 
-速率限制 (Rate Limiting)、节流 (Throttling) 和防抖 (Debouncing) 是控制函数执行频率的三种不同方法。每种技术以不同方式阻止执行，使它们具有"有损性"——意味着当函数被请求过于频繁时，某些调用将不会执行。了解何时使用每种方法对于构建高性能和可靠的应用程序至关重要。本指南将介绍 TanStack Pacer 的速率限制概念。
+速率限制 (Rate Limiting)、节流 (Throttling) 和防抖 (Debouncing) 是控制函数执行频率的三种不同方法。每种技术以不同的方式阻止执行，使它们成为"有损"的 - 意味着当函数被请求过于频繁时，某些调用将不会执行。了解何时使用每种方法对于构建高性能和可靠的应用程序至关重要。本指南将介绍 TanStack Pacer 的速率限制概念。
 
-> [!NOTE]
+> [!注意]
 > TanStack Pacer 目前仅是一个前端库。这些是用于客户端速率限制的实用工具。
 
 ## 速率限制概念
 
-速率限制是一种技术，用于限制函数在特定时间窗口内的执行速率。它特别适用于需要防止函数被过于频繁调用的场景，例如处理 API 请求或其他外部服务调用。这是最*简单*的方法，因为它允许执行突发，直到达到配额为止。
+速率限制是一种限制函数在特定时间窗口内执行速率的技术。它特别适用于需要防止函数被过于频繁调用的场景，例如处理 API 请求或其他外部服务调用时。这是最*简单*的方法，因为它允许执行突发调用，直到达到配额限制。
 
 ### 速率限制可视化
 
 ```text
-速率限制 (限制: 每个窗口 3 次调用)
-时间线: [每秒一个刻度]
-                                        窗口 1                  |    窗口 2            
-调用:        ⬇️     ⬇️     ⬇️     ⬇️     ⬇️                             ⬇️     ⬇️
-已执行:     ✅     ✅     ✅     ❌     ❌                             ✅     ✅
-             [=== 允许 3 次 ===][=== 阻止直到窗口结束 ===][=== 新窗口 =======]
+Rate Limiting (limit: 3 calls per window)
+Timeline: [1 second per tick]
+                                        Window 1                  |    Window 2            
+Calls:        ⬇️     ⬇️     ⬇️     ⬇️     ⬇️                             ⬇️     ⬇️
+Executed:     ✅     ✅     ✅     ❌     ❌                             ✅     ✅
+             [=== 3 allowed ===][=== blocked until window ends ===][=== new window =======]
 ```
 
 ### 何时使用速率限制
 
-速率限制在处理可能意外压倒后端服务或导致浏览器性能问题的前端操作时特别重要。
+速率限制在处理可能意外压垮后端服务或导致浏览器性能问题的前端操作时尤为重要。
 
 常见用例包括：
 - 防止快速用户交互（如按钮点击或表单提交）导致的意外 API 滥用
-- 可接受突发行为但希望限制最大速率的场景
+- 可接受突发行为但需要限制最大速率的场景
 - 防止意外的无限循环或递归操作
 
 ### 何时不使用速率限制
 
-速率限制是控制函数执行频率的最简单方法。它是这三种技术中最不灵活且限制最多的。考虑使用[节流](../guides/throttling)或[防抖](../guides/debouncing)来获得更分散的执行。
+速率限制是控制函数执行频率最简单的方法。它是这三种技术中最不灵活且限制性最强的。考虑使用[节流](../guides/throttling)或[防抖](../guides/debouncing)来获得更均匀的执行间隔。
 
-> [!TIP]
-> 对于大多数用例，您可能不想使用"速率限制"。考虑使用[节流](../guides/throttling)或[防抖](../guides/debouncing)替代。
+> [!提示]
+> 大多数情况下您可能不需要使用"速率限制"。考虑使用[节流](../guides/throttling)或[防抖](../guides/debouncing)替代。
 
-速率限制的"有损"特性也意味着某些执行将被拒绝和丢失。如果您需要确保所有执行始终成功，这可能是个问题。如果需要确保所有执行都被排队等待执行，但通过节流延迟来减慢执行速率，请考虑使用[队列](../guides/queueing)。
+速率限制的"有损"特性也意味着某些执行将被拒绝并丢失。如果您需要确保所有执行始终成功，这可能是个问题。如果需要确保所有执行都被排队等待执行，但通过节流延迟来减慢执行速率，请考虑使用[队列](../guides/queueing)。
 
 ## TanStack Pacer 中的速率限制
 
-TanStack Pacer 通过 `RateLimiter` 和 `AsyncRateLimiter` 类（及其对应的 `rateLimit` 和 `asyncRateLimit` 函数）提供同步和异步速率限制。
+TanStack Pacer 通过 `RateLimiter` 和 `AsyncRateLimiter` 类（及其对应的 `rateLimit` 和 `asyncRateLimit` 函数）提供同步和异步速率限制功能。
 
 ### 使用 `rateLimit` 的基本用法
 
@@ -60,9 +60,9 @@ const rateLimitedApi = rateLimit(
   (id: string) => fetchUserData(id),
   {
     limit: 5,
-    window: 60 * 1000, // 1 分钟，以毫秒为单位
+    window: 60 * 1000, // 1 分钟（毫秒）
     onReject: (rateLimiter) => {
-      console.log(`超过速率限制。请在 ${rateLimiter.getMsUntilNextWindow()}ms 后重试`)
+      console.log(`超过速率限制。请在 ${rateLimiter.getMsUntilNextWindow()} 毫秒后重试`)
     }
   }
 )
@@ -73,7 +73,7 @@ rateLimitedApi('user-2') // ✅ 执行
 rateLimitedApi('user-3') // ✅ 执行
 rateLimitedApi('user-4') // ✅ 执行
 rateLimitedApi('user-5') // ✅ 执行
-rateLimitedApi('user-6') // ❌ 拒绝，直到窗口重置
+rateLimitedApi('user-6') // ❌ 拒绝直到窗口重置
 ```
 
 ### 使用 `RateLimiter` 类的高级用法
@@ -93,7 +93,7 @@ const limiter = new RateLimiter(
       console.log('函数已执行', rateLimiter.getExecutionCount())
     },
     onReject: (rateLimiter) => {
-      console.log(`超过速率限制。请在 ${rateLimiter.getMsUntilNextWindow()}ms 后重试`)
+      console.log(`超过速率限制。请在 ${rateLimiter.getMsUntilNextWindow()} 毫秒后重试`)
     }
   }
 )
@@ -103,7 +103,7 @@ console.log(limiter.getRemainingInWindow()) // 当前窗口中剩余的调用次
 console.log(limiter.getExecutionCount()) // 成功执行的总次数
 console.log(limiter.getRejectionCount()) // 被拒绝执行的总次数
 
-// 尝试执行（返回布尔值表示成功）
+// 尝试执行（返回布尔值表示是否成功）
 limiter.maybeExecute('user-1')
 
 // 动态更新选项
@@ -126,7 +126,7 @@ const limiter = new RateLimiter(fn, {
 limiter.setOptions({ enabled: true }) // 随时启用
 ```
 
-如果您使用的是框架适配器，其中速率限制器选项是响应式的，您可以将 `enabled` 选项设置为条件值以动态启用/禁用速率限制器。但是，如果您使用的是 `rateLimit` 函数或直接使用 `RateLimiter` 类，则必须使用 `setOptions` 方法来更改 `enabled` 选项，因为传递的选项实际上是传递给 `RateLimiter` 类的构造函数。
+如果您使用的是框架适配器，其中速率限制器选项是响应式的，您可以将 `enabled` 选项设置为条件值以动态启用/禁用速率限制器。但是，如果您直接使用 `rateLimit` 函数或 `RateLimiter` 类，则必须使用 `setOptions` 方法来更改 `enabled` 选项，因为传递的选项实际上是传递给 `RateLimiter` 类构造函数的。
 
 ### 回调选项
 
@@ -146,12 +146,12 @@ const limiter = new RateLimiter(fn, {
   },
   onReject: (rateLimiter) => {
     // 当执行被拒绝时调用
-    console.log(`超过速率限制。请在 ${rateLimiter.getMsUntilNextWindow()}ms 后重试`)
+    console.log(`超过速率限制。请在 ${rateLimiter.getMsUntilNextWindow()} 毫秒后重试`)
   }
 })
 ```
 
-`onExecute` 回调在每次成功执行速率限制函数后调用，而 `onReject` 回调在由于速率限制而拒绝执行时调用。这些回调对于跟踪执行、更新 UI 状态或向用户提供反馈非常有用。
+`onExecute` 回调在每次成功执行速率限制函数后调用，而 `onReject` 回调在因速率限制而拒绝执行时调用。这些回调对于跟踪执行、更新 UI 状态或向用户提供反馈非常有用。
 
 #### 异步速率限制器回调
 
@@ -169,10 +169,10 @@ const asyncLimiter = new AsyncRateLimiter(async (id) => {
   },
   onReject: (rateLimiter) => {
     // 当执行被拒绝时调用
-    console.log(`超过速率限制。请在 ${rateLimiter.getMsUntilNextWindow()}ms 后重试`)
+    console.log(`超过速率限制。请在 ${rateLimiter.getMsUntilNextWindow()} 毫秒后重试`)
   },
   onError: (error) => {
-    // 如果异步函数抛出错误时调用
+    // 如果异步函数抛出错误则调用
     console.error('异步函数失败:', error)
   }
 })
@@ -182,15 +182,37 @@ const asyncLimiter = new AsyncRateLimiter(async (id) => {
 
 ### 异步速率限制
 
-在以下情况下使用 `AsyncRateLimiter`：
-- 您的速率限制函数返回 Promise
-- 您需要处理来自异步函数的错误
-- 您希望确保即使异步函数需要时间完成也能正确进行速率限制
+异步速率限制器提供了一种强大的方法来处理带有限速的异步操作，与同步版本相比具有几个关键优势。虽然同步速率限制器适用于 UI 事件和即时反馈，但异步版本专门设计用于处理 API 调用、数据库操作和其他异步任务。
+
+#### 与同步速率限制的主要区别
+
+1. **返回值处理**
+与返回布尔值表示成功的同步速率限制器不同，异步版本允许您捕获和使用来自速率限制函数的返回值。这在需要使用 API 调用或其他异步操作的结果时特别有用。`maybeExecute` 方法返回一个 Promise，该 Promise 解析为函数的返回值，允许您等待结果并适当处理。
+
+2. **增强的回调系统**
+异步速率限制器提供了比同步版本更复杂的回调系统。该系统包括：
+- `onExecute`：每次成功执行后调用，提供速率限制器实例
+- `onReject`：当执行因速率限制被拒绝时调用，提供速率限制器实例
+- `onError`：如果异步函数抛出错误则调用，提供错误和速率限制器实例
+
+3. **执行跟踪**
+异步速率限制器通过几种方法提供全面的执行跟踪：
+- `getExecutionCount()`：成功执行的次数
+- `getRejectionCount()`：被拒绝执行的次数
+- `getRemainingInWindow()`：当前窗口中剩余的可用执行次数
+- `getMsUntilNextWindow()`：距离下一个窗口开始的毫秒数
+
+4. **顺序执行**
+异步速率限制器确保后续执行等待前一次调用完成后再开始。这防止了执行顺序混乱，并保证每次调用处理最新的数据。这在处理依赖于先前调用结果的操作或维护数据一致性至关重要时尤为重要。
+
+例如，如果您正在更新用户配置文件然后立即获取其更新后的数据，异步速率限制器将确保获取操作等待更新完成，防止可能出现陈旧数据的竞态条件。
+
+#### 基本用法示例
+
+以下是一个基本示例，展示如何将异步速率限制器用于 API 操作：
 
 ```ts
-import { asyncRateLimit } from '@tanstack/pacer'
-
-const rateLimited = asyncRateLimit(
+const rateLimitedApi = asyncRateLimit(
   async (id: string) => {
     const response = await fetch(`/api/data/${id}`)
     return response.json()
@@ -198,21 +220,38 @@ const rateLimited = asyncRateLimit(
   {
     limit: 5,
     window: 1000,
-    onError: (error) => {
+    onExecute: (limiter) => {
+      console.log('API 调用成功:', limiter.getExecutionCount())
+    },
+    onReject: (limiter) => {
+      console.log(`超过速率限制。请在 ${limiter.getMsUntilNextWindow()} 毫秒后重试`)
+    },
+    onError: (error, limiter) => {
       console.error('API 调用失败:', error)
     }
   }
 )
 
-// 返回 Promise<boolean> - 解析为 true 表示已执行，false 表示被拒绝
-const wasExecuted = await rateLimited('123')
+// 使用
+const result = await rateLimitedApi('123')
 ```
 
-异步版本提供基于 Promise 的执行跟踪、通过 `onError` 回调的错误处理、待处理异步操作的正确清理以及可等待的 `maybeExecute` 方法。
+#### 高级模式
+
+异步速率限制器可以与各种模式结合以解决复杂问题：
+
+1. **状态管理集成**
+当将异步速率限制器与状态管理系统（如 React 的 useState 或 Solid 的 createSignal）一起使用时，您可以创建强大的模式来处理加载状态、错误状态和数据更新。速率限制器的回调为基于操作成功或失败更新 UI 状态提供了完美的钩子。
+
+2. **竞态条件预防**
+速率限制模式自然防止了许多场景中的竞态条件。当应用程序的多个部分尝试同时更新同一资源时，速率限制器确保更新在配置的限制内发生，同时仍向所有调用者提供结果。
+
+3. **错误恢复**
+异步速率限制器的错误处理能力使其成为实现重试逻辑和错误恢复模式的理想选择。您可以使用 `onError` 回调实现自定义错误处理策略，如指数退避或回退机制。
 
 ### 框架适配器
 
-每个框架适配器都提供构建在核心速率限制功能之上的钩子，以与框架的状态管理系统集成。每个框架都有可用的钩子，如 `createRateLimiter`、`useRateLimitedCallback`、`useRateLimitedState` 或 `useRateLimitedValue`。
+每个框架适配器都提供构建在核心速率限制功能之上的钩子，以与框架的状态管理系统集成。每个框架都提供如 `createRateLimiter`、`useRateLimitedCallback`、`useRateLimitedState` 或 `useRateLimitedValue` 等钩子。
 
 以下是一些示例：
 
@@ -235,8 +274,8 @@ const handleFetch = useRateLimitedCallback(
 
 // 用于响应式状态管理的基于状态的钩子
 const [instantState, setInstantState] = useState('')
-const [rateLimitedState, setRateLimitedState] = useRateLimitedValue(
-  instantState, // 要速率限制的值
+const [rateLimitedValue] = useRateLimitedValue(
+  instantState, // 要限制速率的数值
   { limit: 5, window: 1000 }
 )
 ```

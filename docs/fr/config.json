@@ -10,7 +10,7 @@
       "label": "Premiers pas",
       "children": [
         {
-          "label": "Vue d'ensemble",
+          "label": "Aperçu",
           "to": "overview"
         },
         {
@@ -47,7 +47,7 @@
       "label": "Guides",
       "children": [
         {
-          "label": "Guide sur le debouncing",
+          "label": "Guide sur le débouncement",
           "to": "guides/debouncing"
         },
         {
@@ -365,7 +365,7 @@
               "to": "framework/react/reference/functions/usequeuer"
             },
             {
-              "label": "useQueuerState",
+              "label": "useQueuedState",
               "to": "framework/react/reference/functions/usequeuerstate"
             },
             {
@@ -394,7 +394,7 @@
       ]
     },
     {
-      "label": "Exemples Debouncer",
+      "label": "Exemples de Debouncer",
       "children": [],
       "frameworks": [
         {
@@ -462,7 +462,7 @@
       ]
     },
     {
-      "label": "Exemples Throttler",
+      "label": "Exemples de Throttler",
       "children": [],
       "frameworks": [
         {
@@ -530,7 +530,7 @@
       ]
     },
     {
-      "label": "Exemples Rate Limiter",
+      "label": "Exemples de Rate Limiter",
       "children": [],
       "frameworks": [
         {
@@ -598,7 +598,7 @@
       ]
     },
     {
-      "label": "Exemples Queue",
+      "label": "Exemples de Queue",
       "children": [],
       "frameworks": [
         {
@@ -613,16 +613,20 @@
               "to": "framework/react/examples/useQueuer"
             },
             {
-              "label": "useQueuerState",
-              "to": "framework/react/examples/useQueuerState"
+              "label": "useQueuedState",
+              "to": "framework/react/examples/useQueuedState"
+            },
+            {
+              "label": "useQueuedValue",
+              "to": "framework/react/examples/useQueuedValue"
             },
             {
               "label": "useAsyncQueuer",
               "to": "framework/react/examples/useAsyncQueuer"
             },
             {
-              "label": "useAsyncQueuerState",
-              "to": "framework/react/examples/useAsyncQueuerState"
+              "label": "useAsyncQueuedState",
+              "to": "framework/react/examples/useAsyncQueuedState"
             }
           ]
         },
@@ -640,6 +644,29 @@
             {
               "label": "createAsyncQueuer",
               "to": "framework/solid/examples/createAsyncQueuer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Exemples avancés",
+      "children": [],
+      "frameworks": [
+        {
+          "label": "react",
+          "children": [
+            {
+              "label": "Préchargement avec débouncement dans React Query",
+              "to": "framework/react/examples/react-query-debounced-prefetch"
+            },
+            {
+              "label": "Préchargement avec throttling dans React Query",
+              "to": "framework/react/examples/react-query-throttled-prefetch"
+            },
+            {
+              "label": "Préchargement en file d'attente dans React Query",
+              "to": "framework/react/examples/react-query-queued-prefetch"
             }
           ]
         }

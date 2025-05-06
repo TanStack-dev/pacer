@@ -1,18 +1,18 @@
 ---
-source-updated-at: '2025-04-24T12:27:47.000Z'
-translation-updated-at: '2025-05-02T04:30:49.844Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:14:29.456Z'
 title: Throttling-Anleitung
 id: throttling
 ---
-# Throttling Guide (Drosselungs-Leitfaden)
+# Throttling Guide (Drosselungsleitfaden)
 
-Rate Limiting (Ratenbegrenzung), Throttling (Drosselung) und Debouncing (Entprellung) sind drei verschiedene Ansätze zur Steuerung der Ausführungsfrequenz von Funktionen. Jede Technik blockiert Ausführungen auf unterschiedliche Weise, wodurch sie "verlustbehaftet" (lossy) sind – das bedeutet, dass einige Funktionsaufrufe nicht ausgeführt werden, wenn sie zu häufig angefordert werden. Das Verständnis, wann welcher Ansatz verwendet werden sollte, ist entscheidend für die Entwicklung performanter und zuverlässiger Anwendungen. Dieser Leitfaden behandelt die Drosselungskonzepte (Throttling) von TanStack Pacer.
+Rate Limiting (Ratenbegrenzung), Throttling (Drosselung) und Debouncing (Entprellung) sind drei verschiedene Ansätze zur Steuerung der Ausführungsfrequenz von Funktionen. Jede Technik blockiert Ausführungen auf unterschiedliche Weise, was sie "verlustbehaftet" macht - das bedeutet, dass einige Funktionsaufrufe nicht ausgeführt werden, wenn sie zu häufig angefordert werden. Das Verständnis, wann welcher Ansatz verwendet werden sollte, ist entscheidend für die Entwicklung leistungsfähiger und zuverlässiger Anwendungen. Dieser Leitfaden behandelt die Throttling-Konzepte von TanStack Pacer.
 
-## Drosselungskonzept (Throttling Concept)
+## Throttling-Konzept (Drosselungskonzept)
 
-Drosselung stellt sicher, dass Funktionsausführungen gleichmäßig über die Zeit verteilt werden. Im Gegensatz zur Ratenbegrenzung (Rate Limiting), die Ausführungsbursts bis zu einem Limit erlaubt, oder zur Entprellung (Debouncing), die auf das Ende der Aktivität wartet, erzeugt Drosselung ein gleichmäßigeres Ausführungsmuster, indem sie konsistente Verzögerungen zwischen den Aufrufen erzwingt. Wenn Sie eine Drosselung von einer Ausführung pro Sekunde festlegen, werden die Aufrufe gleichmäßig verteilt, unabhängig davon, wie schnell sie angefordert werden.
+Throttling stellt sicher, dass Funktionsausführungen gleichmäßig über die Zeit verteilt sind. Im Gegensatz zur Ratenbegrenzung, die Ausführungsbursts bis zu einem Limit erlaubt, oder zur Entprellung, die auf das Ende der Aktivität wartet, erzeugt Throttling ein gleichmäßigeres Ausführungsmuster durch konsequente Verzögerungen zwischen den Aufrufen. Wenn Sie eine Drosselung von einer Ausführung pro Sekunde festlegen, werden die Aufrufe gleichmäßig verteilt, unabhängig davon, wie schnell sie angefordert werden.
 
-### Drosselungsvisualisierung (Throttling Visualization)
+### Throttling-Visualisierung (Drosselungsvisualisierung)
 
 ```text
 Throttling (one execution per 3 ticks)
@@ -23,39 +23,39 @@ Executed:     ✅  ❌  ⏳  ->   ✅  ❌  ❌  ❌  ✅             ✅
              ^ Nur eine Ausführung alle 3 Ticks erlaubt,
                unabhängig von der Anzahl der Aufrufe
 
-             [Erster Burst]    [Weitere Aufrufe]         [Verteilte Aufrufe]
-             Erste Ausführung  Ausführung nach           Ausführung jeweils nach
-             dann drosseln    Wartezeit                 Ablauf der Wartezeit
+             [Erster Burst]    [Weitere Aufrufe]        [Gleichmäßige Aufrufe]
+             Erste Ausführung  Ausführung nach          Ausführung jeweils nach
+             dann drosseln     Wartezeit                Ablauf der Wartezeit
 ```
 
-### Wann Drosselung verwenden (When to Use Throttling)
+### Wann Throttling verwenden
 
-Drosselung ist besonders effektiv, wenn Sie konsistente, vorhersehbare Ausführungszeiten benötigen. Dies macht sie ideal für die Handhabung häufiger Ereignisse oder Updates, bei denen Sie ein gleichmäßiges, kontrolliertes Verhalten wünschen.
+Throttling ist besonders effektiv, wenn Sie konsistente, vorhersehbare Ausführungszeiten benötigen. Dies macht es ideal für die Handhabung häufiger Ereignisse oder Updates, bei denen Sie ein gleichmäßiges, kontrolliertes Verhalten wünschen.
 
-Häufige Anwendungsfälle:
-- UI-Updates mit konsistenter Timing-Anforderung (z.B. Fortschrittsanzeigen)
-- Scroll- oder Resize-Event-Handler, die den Browser nicht überlasten sollen
-- Echtzeit-Datenabfragen mit gewünschten konsistenten Intervallen
-- Ressourcenintensive Operationen mit gleichmäßiger Ausführung
+Häufige Anwendungsfälle sind:
+- UI-Updates, die konsistente Timing benötigen (z.B. Fortschrittsanzeigen)
+- Scroll- oder Resize-Event-Handler, die den Browser nicht überlasten sollten
+- Echtzeit-Datenabfragen mit konsistenten Intervallen
+- Ressourcenintensive Operationen mit gleichmäßiger Geschwindigkeit
 - Spielschleifen-Updates oder Animation Frame Handling
-- Live-Suchvorschläge während der Benutzereingabe
+- Live-Suchvorschläge während der Eingabe
 
-### Wann Drosselung nicht verwenden (When Not to Use Throttling)
+### Wann Throttling nicht verwenden
 
-Drosselung ist möglicherweise nicht die beste Wahl, wenn:
+Throttling ist möglicherweise nicht die beste Wahl, wenn:
 - Sie auf das Ende der Aktivität warten möchten (verwenden Sie stattdessen [Debouncing](../guides/debouncing))
-- Sie sich keine verpassten Ausführungen leisten können (verwenden Sie stattdessen [Queueing](../guides/queueing))
+- Sie es sich nicht leisten können, Ausführungen zu verpassen (verwenden Sie stattdessen [Queueing](../guides/queueing))
 
 > [!TIP]
-> Drosselung ist oft die beste Wahl, wenn Sie gleichmäßige, konsistente Ausführungszeiten benötigen. Sie bietet ein vorhersehbareres Ausführungsmuster als Ratenbegrenzung und unmittelbareres Feedback als Entprellung.
+> Throttling ist oft die beste Wahl, wenn Sie gleichmäßige, konsistente Ausführungszeiten benötigen. Es bietet ein vorhersehbareres Ausführungsmuster als Ratenbegrenzung und unmittelbareres Feedback als Entprellung.
 
-## Drosselung in TanStack Pacer (Throttling in TanStack Pacer)
+## Throttling in TanStack Pacer
 
-TanStack Pacer bietet sowohl synchrone als auch asynchrone Drosselung über die Klassen `Throttler` und `AsyncThrottler` (sowie die entsprechenden Funktionen `throttle` und `asyncThrottle`).
+TanStack Pacer bietet sowohl synchrones als auch asynchrones Throttling durch die Klassen `Throttler` und `AsyncThrottler` (und ihre entsprechenden Funktionen `throttle` und `asyncThrottle`).
 
-### Grundlegende Verwendung mit `throttle` (Basic Usage with `throttle`)
+### Grundlegende Verwendung mit `throttle`
 
-Die Funktion `throttle` ist der einfachste Weg, Drosselung zu einer beliebigen Funktion hinzuzufügen:
+Die `throttle`-Funktion ist der einfachste Weg, um Throttling zu einer Funktion hinzuzufügen:
 
 ```ts
 import { throttle } from '@tanstack/pacer'
@@ -74,9 +74,9 @@ for (let i = 0; i < 100; i++) {
 }
 ```
 
-### Erweiterte Verwendung mit der `Throttler`-Klasse (Advanced Usage with `Throttler` Class)
+### Erweiterte Verwendung mit der `Throttler`-Klasse
 
-Für mehr Kontrolle über das Drosselungsverhalten können Sie die `Throttler`-Klasse direkt verwenden:
+Für mehr Kontrolle über das Throttling-Verhalten können Sie die `Throttler`-Klasse direkt verwenden:
 
 ```ts
 import { Throttler } from '@tanstack/pacer'
@@ -86,7 +86,7 @@ const updateThrottler = new Throttler(
   { wait: 200 }
 )
 
-// Informationen zum Ausführungsstatus abrufen
+// Informationen über den Ausführungsstatus abrufen
 console.log(updateThrottler.getExecutionCount()) // Anzahl erfolgreicher Ausführungen
 console.log(updateThrottler.getLastExecutionTime()) // Zeitstempel der letzten Ausführung
 
@@ -94,44 +94,44 @@ console.log(updateThrottler.getLastExecutionTime()) // Zeitstempel der letzten A
 updateThrottler.cancel()
 ```
 
-### Führende und nachfolgende Ausführungen (Leading and Trailing Executions)
+### Führende und nachfolgende Ausführungen
 
-Der synchrone Throttler unterstützt sowohl führende (leading) als auch nachfolgende (trailing) Ausführungen:
+Der synchrone Throttler unterstützt sowohl führende als auch nachfolgende Ausführungen:
 
 ```ts
 const throttledFn = throttle(fn, {
   wait: 200,
-  leading: true,   // Sofortige Ausführung beim ersten Aufruf (Standard)
-  trailing: true,  // Ausführung nach Wartezeit (Standard)
+  leading: true,   // Sofort bei erstem Aufruf ausführen (Standard)
+  trailing: true,  // Nach Wartezeit ausführen (Standard)
 })
 ```
 
-- `leading: true` (Standard) - Sofortige Ausführung beim ersten Aufruf
+- `leading: true` (Standard) - Sofort bei erstem Aufruf ausführen
 - `leading: false` - Ersten Aufruf überspringen, auf nachfolgende Ausführung warten
 - `trailing: true` (Standard) - Letzten Aufruf nach Wartezeit ausführen
-- `trailing: false` - Letzten Aufruf überspringen, falls innerhalb der Wartezeit
+- `trailing: false` - Letzten Aufruf überspringen, wenn innerhalb der Wartezeit
 
 Gängige Muster:
-- `{ leading: true, trailing: true }` - Standard, reaktionsschnellste Variante
+- `{ leading: true, trailing: true }` - Standard, am reaktionsschnellsten
 - `{ leading: false, trailing: true }` - Alle Ausführungen verzögern
-- `{ leading: true, trailing: false }` - Gequeute Ausführungen überspringen
+- `{ leading: true, trailing: false }` - Gequeue Ausführungen überspringen
 
-### Aktivieren/Deaktivieren (Enabling/Disabling)
+### Aktivieren/Deaktivieren
 
-Die `Throttler`-Klasse unterstützt das Aktivieren/Deaktivieren über die Option `enabled`. Mit der Methode `setOptions` können Sie den Throttler jederzeit aktivieren oder deaktivieren:
+Die `Throttler`-Klasse unterstützt das Aktivieren/Deaktivieren über die Option `enabled`. Mit der Methode `setOptions` können Sie den Throttler jederzeit aktivieren/deaktivieren:
 
 ```ts
 const throttler = new Throttler(fn, { wait: 200, enabled: false }) // Standardmäßig deaktiviert
 throttler.setOptions({ enabled: true }) // Jederzeit aktivierbar
 ```
 
-Wenn Sie ein Framework-Adapter verwenden, bei dem die Throttler-Optionen reaktiv sind, können Sie die Option `enabled` auf einen bedingten Wert setzen, um den Throttler dynamisch zu aktivieren/deaktivieren. Bei direkter Verwendung der `throttle`-Funktion oder der `Throttler`-Klasse müssen Sie jedoch die Methode `setOptions` verwenden, da die übergebenen Optionen an den Konstruktor der `Throttler`-Klasse übergeben werden.
+Wenn Sie ein Framework-Adapter verwenden, bei dem die Throttler-Optionen reaktiv sind, können Sie die Option `enabled` auf einen bedingten Wert setzen, um den Throttler dynamisch zu aktivieren/deaktivieren. Wenn Sie jedoch die `throttle`-Funktion oder die `Throttler`-Klasse direkt verwenden, müssen Sie die Methode `setOptions` verwenden, um die `enabled`-Option zu ändern, da die übergebenen Optionen tatsächlich an den Konstruktor der `Throttler`-Klasse übergeben werden.
 
-### Callback-Optionen (Callback Options)
+### Callback-Optionen
 
-Sowohl die synchronen als auch die asynchronen Throttler unterstützen Callback-Optionen zur Handhabung verschiedener Aspekte des Drosselungslebenszyklus:
+Sowohl die synchronen als auch die asynchronen Throttler unterstützen Callback-Optionen zur Handhabung verschiedener Aspekte des Throttling-Lebenszyklus:
 
-#### Synchrone Throttler-Callbacks (Synchronous Throttler Callbacks)
+#### Synchroner Throttler-Callbacks
 
 Der synchrone `Throttler` unterstützt folgenden Callback:
 
@@ -139,17 +139,17 @@ Der synchrone `Throttler` unterstützt folgenden Callback:
 const throttler = new Throttler(fn, {
   wait: 200,
   onExecute: (throttler) => {
-    // Wird nach jeder erfolgreichen Ausführung aufgerufen
+    // Nach jeder erfolgreichen Ausführung aufgerufen
     console.log('Funktion ausgeführt', throttler.getExecutionCount())
   }
 })
 ```
 
-Der `onExecute`-Callback wird nach jeder erfolgreichen Ausführung der gedrosselten Funktion aufgerufen und eignet sich zur Verfolgung von Ausführungen, Aktualisierung des UI-Zustands oder Bereinigungsoperationen.
+Der `onExecute`-Callback wird nach jeder erfolgreichen Ausführung der gedrosselten Funktion aufgerufen, was ihn nützlich für die Verfolgung von Ausführungen, die Aktualisierung des UI-Zustands oder Bereinigungsoperationen macht.
 
-#### Asynchrone Throttler-Callbacks (Asynchronous Throttler Callbacks)
+#### Asynchrone Throttler-Callbacks
 
-Der asynchrone `AsyncThrottler` unterstützt zusätzliche Callbacks zur Fehlerbehandlung:
+Der asynchrone `AsyncThrottler` unterstützt zusätzliche Callbacks für die Fehlerbehandlung:
 
 ```ts
 const asyncThrottler = new AsyncThrottler(async (value) => {
@@ -157,47 +157,85 @@ const asyncThrottler = new AsyncThrottler(async (value) => {
 }, {
   wait: 200,
   onExecute: (throttler) => {
-    // Wird nach jeder erfolgreichen Ausführung aufgerufen
+    // Nach jeder erfolgreichen Ausführung aufgerufen
     console.log('Async-Funktion ausgeführt', throttler.getExecutionCount())
   },
   onError: (error) => {
-    // Wird aufgerufen, wenn die Async-Funktion einen Fehler wirft
+    // Bei Fehlern der Async-Funktion aufgerufen
     console.error('Async-Funktion fehlgeschlagen:', error)
   }
 })
 ```
 
-Der `onExecute`-Callback funktioniert wie beim synchronen Throttler, während `onError` eine ordnungsgemäße Fehlerbehandlung ohne Unterbrechung der Drosselungskette ermöglicht. Diese Callbacks sind besonders nützlich für die Verfolgung von Ausführungszahlen, UI-Zustandsaktualisierungen, Fehlerbehandlung, Bereinigungsoperationen und Protokollierung.
+Der `onExecute`-Callback funktioniert wie beim synchronen Throttler, während der `onError`-Callback eine elegante Fehlerbehandlung ohne Unterbrechung der Throttling-Kette ermöglicht. Diese Callbacks sind besonders nützlich für die Verfolgung von Ausführungszählern, UI-Zustandsaktualisierungen, Fehlerbehandlung, Bereinigungsoperationen und die Protokollierung von Ausführungsmetriken.
 
-### Asynchrone Drosselung (Asynchronous Throttling)
+### Asynchrones Throttling
 
-Für asynchrone Funktionen oder bei Bedarf an Fehlerbehandlung verwenden Sie `AsyncThrottler` oder `asyncThrottle`:
+Der asynchrone Throttler bietet eine leistungsstarke Möglichkeit, asynchrone Operationen mit Throttling zu handhaben, mit mehreren Vorteilen gegenüber der synchronen Version. Während der synchrone Throttler ideal für UI-Ereignisse und sofortiges Feedback ist, ist die asynchrone Version speziell für API-Aufrufe, Datenbankoperationen und andere asynchrone Aufgaben konzipiert.
+
+#### Wichtige Unterschiede zum synchronen Throttling
+
+1. **Rückgabewertbehandlung**
+Anders als der synchrone Throttler, der void zurückgibt, erlaubt die asynchrone Version die Erfassung und Verwendung des Rückgabewerts Ihrer gedrosselten Funktion. Dies ist besonders nützlich, wenn Sie mit Ergebnissen von API-Aufrufen oder anderen asynchronen Operationen arbeiten müssen. Die Methode `maybeExecute` gibt ein Promise zurück, das mit dem Rückgabewert der Funktion aufgelöst wird, sodass Sie auf das Ergebnis warten und es entsprechend verarbeiten können.
+
+2. **Erweitertes Callback-System**
+Der asynchrone Throttler bietet ein ausgefeilteres Callback-System im Vergleich zum einzelnen `onExecute`-Callback der synchronen Version. Dieses System umfasst:
+- `onSuccess`: Wird aufgerufen, wenn die Async-Funktion erfolgreich abgeschlossen wird, mit Ergebnis und Throttler-Instanz
+- `onError`: Wird bei Fehlern der Async-Funktion aufgerufen, mit Fehler und Throttler-Instanz
+- `onSettled`: Wird nach jedem Ausführungsversuch aufgerufen, unabhängig von Erfolg oder Misserfolg
+
+3. **Ausführungsverfolgung**
+Der asynchrone Throttler bietet umfassende Ausführungsverfolgung durch mehrere Methoden:
+- `getSuccessCount()`: Anzahl erfolgreicher Ausführungen
+- `getErrorCount()`: Anzahl fehlgeschlagener Ausführungen
+- `getSettledCount()`: Gesamtanzahl abgeschlossener Ausführungen (Erfolg + Fehler)
+
+4. **Sequenzielle Ausführung**
+Der asynchrone Throttler stellt sicher, dass nachfolgende Ausführungen auf den Abschluss des vorherigen Aufrufs warten. Dies verhindert Out-of-Order-Ausführungen und garantiert, dass jeder Aufruf die aktuellsten Daten verarbeitet. Dies ist besonders wichtig bei Operationen, die von den Ergebnissen vorheriger Aufrufe abhängen oder bei denen die Datenkonsistenz kritisch ist.
+
+Zum Beispiel, wenn Sie ein Benutzerprofil aktualisieren und dann sofort die aktualisierten Daten abrufen, sorgt der asynchrone Throttler dafür, dass der Abrufvorgang auf den Abschluss der Aktualisierung wartet, wodurch Race Conditions vermieden werden, bei denen Sie veraltete Daten erhalten könnten.
+
+#### Grundlegendes Anwendungsbeispiel
+
+Hier ein einfaches Beispiel für die Verwendung des asynchronen Throttlers für eine Suchoperation:
 
 ```ts
-import { asyncThrottle } from '@tanstack/pacer'
-
-const throttledFetch = asyncThrottle(
-  async (id: string) => {
-    const response = await fetch(`/api/data/${id}`)
-    return response.json()
+const throttledSearch = asyncThrottle(
+  async (searchTerm: string) => {
+    const results = await fetchSearchResults(searchTerm)
+    return results
   },
   {
-    wait: 1000,
-    onError: (error) => {
-      console.error('API-Aufruf fehlgeschlagen:', error)
+    wait: 500,
+    onSuccess: (results, throttler) => {
+      console.log('Suche erfolgreich:', results)
+    },
+    onError: (error, throttler) => {
+      console.error('Suche fehlgeschlagen:', error)
     }
   }
 )
 
-// Führt nur einen API-Aufruf pro Sekunde aus
-await throttledFetch('123')
+// Verwendung
+const results = await throttledSearch('query')
 ```
 
-Die asynchrone Version bietet Promise-basierte Ausführungsverfolgung, Fehlerbehandlung über den `onError`-Callback, ordnungsgemäße Bereinigung ausstehender Async-Operationen und eine await-fähige `maybeExecute`-Methode.
+#### Erweiterte Muster
 
-### Framework-Adapter (Framework Adapters)
+Der asynchrone Throttler kann mit verschiedenen Mustern kombiniert werden, um komplexe Probleme zu lösen:
 
-Jeder Framework-Adapter bietet Hooks, die auf der Kern-Drosselungsfunktionalität aufbauen und sich in das State-Management-System des Frameworks integrieren. Für jedes Framework stehen Hooks wie `createThrottler`, `useThrottledCallback`, `useThrottledState` oder `useThrottledValue` zur Verfügung.
+1. **Integration mit State Management**
+Bei der Verwendung des asynchronen Throttlers mit State-Management-Systemen (wie Reacts useState oder Solids createSignal) können Sie leistungsstarke Muster für die Handhabung von Ladezuständen, Fehlerzuständen und Datenaktualisierungen erstellen. Die Callbacks des Throttlers bieten ideale Hooks für die Aktualisierung des UI-Zustands basierend auf dem Erfolg oder Misserfolg von Operationen.
+
+2. **Race Condition-Prävention**
+Das Throttling-Muster verhindert natürlicherweise Race Conditions in vielen Szenarien. Wenn mehrere Teile Ihrer Anwendung versuchen, dieselbe Ressource gleichzeitig zu aktualisieren, stellt der Throttler sicher, dass Aktualisierungen mit kontrollierter Rate erfolgen, während Ergebnisse trotzdem an alle Aufrufer zurückgegeben werden.
+
+3. **Fehlerbehebung**
+Die Fehlerbehandlungsfähigkeiten des asynchronen Throttlers machen ihn ideal für die Implementierung von Wiederholungslogik und Fehlerbehebungsmustern. Sie können den `onError`-Callback verwenden, um benutzerdefinierte Fehlerbehandlungsstrategien wie exponentielles Backoff oder Fallback-Mechanismen zu implementieren.
+
+### Framework-Adapter
+
+Jeder Framework-Adapter bietet Hooks, die auf der Kern-Throttling-Funktionalität aufbauen und sich in das State-Management-System des Frameworks integrieren. Hooks wie `createThrottler`, `useThrottledCallback`, `useThrottledState` oder `useThrottledValue` sind für jedes Framework verfügbar.
 
 Hier einige Beispiele:
 
@@ -212,7 +250,7 @@ const throttler = useThrottler(
   { wait: 200 }
 )
 
-// Einfacher Callback-Hook für Basis-Anwendungsfälle
+// Einfacher Callback-Hook für grundlegende Anwendungsfälle
 const handleUpdate = useThrottledCallback(
   (value: number) => updateProgressBar(value),
   { wait: 200 }
@@ -220,7 +258,7 @@ const handleUpdate = useThrottledCallback(
 
 // State-basierter Hook für reaktives State-Management
 const [instantState, setInstantState] = useState(0)
-const [throttledState, setThrottledState] = useThrottledValue(
+const [throttledValue] = useThrottledValue(
   instantState, // Zu drosselnder Wert
   { wait: 200 }
 )
@@ -246,4 +284,4 @@ const [value, setValue, throttler] = createThrottledSignal(0, {
 })
 ```
 
-Jeder Framework-Adapter bietet Hooks, die sich in das State-Management-System des Frameworks integrieren, während die Kern-Drosselungsfunktionalität erhalten bleibt.
+Jeder Framework-Adapter bietet Hooks, die sich in das State-Management-System des Frameworks integrieren, während die Kern-Throttling-Funktionalität erhalten bleibt.

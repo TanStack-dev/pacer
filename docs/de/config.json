@@ -47,23 +47,23 @@
       "label": "Anleitungen",
       "children": [
         {
-          "label": "Debouncing-Anleitung",
+          "label": "Anleitung zu Debouncing",
           "to": "guides/debouncing"
         },
         {
-          "label": "Throttling-Anleitung",
+          "label": "Anleitung zu Throttling",
           "to": "guides/throttling"
         },
         {
-          "label": "Ratenbegrenzungs-Anleitung",
+          "label": "Anleitung zur Ratenbegrenzung",
           "to": "guides/rate-limiting"
         },
         {
-          "label": "Warteschlangen-Anleitung",
+          "label": "Anleitung zur Warteschlange",
           "to": "guides/queueing"
         },
         {
-          "label": "Asynchrone Warteschlangen-Anleitung",
+          "label": "Anleitung zur asynchronen Warteschlange",
           "to": "guides/async-queueing"
         }
       ]
@@ -365,7 +365,7 @@
               "to": "framework/react/reference/functions/usequeuer"
             },
             {
-              "label": "useQueuerState",
+              "label": "useQueuedState",
               "to": "framework/react/reference/functions/usequeuerstate"
             },
             {
@@ -613,16 +613,20 @@
               "to": "framework/react/examples/useQueuer"
             },
             {
-              "label": "useQueuerState",
-              "to": "framework/react/examples/useQueuerState"
+              "label": "useQueuedState",
+              "to": "framework/react/examples/useQueuedState"
+            },
+            {
+              "label": "useQueuedValue",
+              "to": "framework/react/examples/useQueuedValue"
             },
             {
               "label": "useAsyncQueuer",
               "to": "framework/react/examples/useAsyncQueuer"
             },
             {
-              "label": "useAsyncQueuerState",
-              "to": "framework/react/examples/useAsyncQueuerState"
+              "label": "useAsyncQueuedState",
+              "to": "framework/react/examples/useAsyncQueuedState"
             }
           ]
         },
@@ -640,6 +644,29 @@
             {
               "label": "createAsyncQueuer",
               "to": "framework/solid/examples/createAsyncQueuer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Erweiterte Beispiele",
+      "children": [],
+      "frameworks": [
+        {
+          "label": "react",
+          "children": [
+            {
+              "label": "Debounced Prefetch mit React Query",
+              "to": "framework/react/examples/react-query-debounced-prefetch"
+            },
+            {
+              "label": "Throttled Prefetch mit React Query",
+              "to": "framework/react/examples/react-query-throttled-prefetch"
+            },
+            {
+              "label": "Queued Prefetch mit React Query",
+              "to": "framework/react/examples/react-query-queued-prefetch"
             }
           ]
         }
