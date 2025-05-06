@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-02T04:32:01.005Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:14:43.285Z'
 id: useDebouncedValue
 title: useDebouncedValue
 ---
@@ -10,10 +10,10 @@ title: useDebouncedValue
 # Function: useDebouncedValue()
 
 ```ts
-function useDebouncedValue<TValue>(value, options): [TValue, Debouncer<Dispatch<SetStateAction<TValue>>, [TValue]>]
+function useDebouncedValue<TValue>(value, options): [TValue, Debouncer<Dispatch<SetStateAction<TValue>>>]
 ```
 
-Defined in: [debouncer/useDebouncedValue.ts:41](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/debouncer/useDebouncedValue.ts#L41)
+Defined in: [react-pacer/src/debouncer/useDebouncedValue.ts:41](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/debouncer/useDebouncedValue.ts#L41)
 
 A React hook that creates a debounced value that updates only after a specified delay.
 Unlike useDebouncedState, this hook automatically tracks changes to the input value
@@ -27,9 +27,9 @@ This is useful for deriving debounced values from props or state that change fre
 like search queries or form inputs, where you want to limit how often downstream effects
 or calculations occur.
 
-The hook returns a tuple containing:
-- The current debounced value
-- The debouncer instance with control methods
+The hook returns the current debounced value and the underlying debouncer instance.
+The debouncer instance can be used to access additional functionality like cancellation
+and execution counts.
 
 ## Type Parameters
 
@@ -43,11 +43,11 @@ The hook returns a tuple containing:
 
 ### options
 
-`DebouncerOptions`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>, \[`SetStateAction`\<`TValue`\>\]\>
+`DebouncerOptions`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>\>
 
 ## Returns
 
-\[`TValue`, `Debouncer`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>, \[`TValue`\]\>\]
+\[`TValue`, `Debouncer`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>\>\]
 
 ## Example
 

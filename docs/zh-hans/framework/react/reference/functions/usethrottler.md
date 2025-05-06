@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-02T04:18:14.663Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:02:12.788Z'
 id: useThrottler
 title: useThrottler
 ---
@@ -10,10 +10,10 @@ title: useThrottler
 # Function: useThrottler()
 
 ```ts
-function useThrottler<TFn, TArgs>(fn, options): Throttler<TFn, TArgs>
+function useThrottler<TFn>(fn, options): Throttler<TFn>
 ```
 
-Defined in: [throttler/useThrottler.ts:42](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/throttler/useThrottler.ts#L42)
+Defined in: [react-pacer/src/throttler/useThrottler.ts:42](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/throttler/useThrottler.ts#L42)
 
 A low-level React hook that creates a `Throttler` instance that limits how often the provided function can execute.
 
@@ -29,8 +29,6 @@ expensive operations or UI updates.
 
 • **TFn** *extends* `AnyFunction`
 
-• **TArgs** *extends* `any`[]
-
 ## Parameters
 
 ### fn
@@ -39,11 +37,11 @@ expensive operations or UI updates.
 
 ### options
 
-`ThrottlerOptions`\<`TFn`, `TArgs`\>
+`ThrottlerOptions`\<`TFn`\>
 
 ## Returns
 
-`Throttler`\<`TFn`, `TArgs`\>
+`Throttler`\<`TFn`\>
 
 ## Example
 

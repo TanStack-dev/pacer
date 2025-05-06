@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-02T04:18:14.696Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:02:12.736Z'
 id: createThrottledValue
 title: createThrottledValue
 ---
@@ -10,10 +10,10 @@ title: createThrottledValue
 # Function: createThrottledValue()
 
 ```ts
-function createThrottledValue<TValue>(value, initialOptions): [Accessor<TValue>, SolidThrottler<Setter<TValue>, [Accessor<TValue>]>]
+function createThrottledValue<TValue>(value, initialOptions): [Accessor<TValue>, SolidThrottler<Setter<TValue>>]
 ```
 
-Defined in: [throttler/createThrottledValue.ts:39](https://github.com/TanStack/pacer/blob/main/packages/solid-pacer/src/throttler/createThrottledValue.ts#L39)
+Defined in: [throttler/createThrottledValue.ts:35](https://github.com/TanStack/pacer/blob/main/packages/solid-pacer/src/throttler/createThrottledValue.ts#L35)
 
 A high-level Solid hook that creates a throttled version of a value that updates at most once within a specified time window.
 This hook uses Solid's createSignal internally to manage the throttled state.
@@ -21,7 +21,10 @@ This hook uses Solid's createSignal internally to manage the throttled state.
 Throttling ensures the value updates occur at a controlled rate regardless of how frequently the input value changes.
 This is useful for rate-limiting expensive re-renders or API calls that depend on rapidly changing values.
 
-The hook returns both the throttled value and the underlying throttler instance for additional control.
+The hook returns a tuple containing:
+- An accessor function that provides the throttled value
+- The throttler instance with control methods
+
 The throttled value will update according to the leading/trailing edge behavior specified in the options.
 
 For more direct control over throttling behavior without Solid state management,
@@ -39,28 +42,21 @@ consider using the lower-level createThrottler hook instead.
 
 ### initialOptions
 
-`ThrottlerOptions`\<`Setter`\<`TValue`\>, \[`Accessor`\<`TValue`\>\]\>
+`ThrottlerOptions`\<`Setter`\<`TValue`\>\>
 
 ## Returns
 
-\[`Accessor`\<`TValue`\>, [`SolidThrottler`](../interfaces/solidthrottler.md)\<`Setter`\<`TValue`\>, \[`Accessor`\<`TValue`\>\]\>\]
+\[`Accessor`\<`TValue`\>, [`SolidThrottler`](../interfaces/solidthrottler.md)\<`Setter`\<`TValue`\>\>\]
 
 ## Example
 
 ```tsx
 // Basic throttling - update at most once per second
-const [throttledValue] = createThrottledValue(rawValue, { wait: 1000 });
+const [throttledValue, throttler] = createThrottledValue(rawValue, { wait: 1000 });
 
-// With custom leading/trailing behavior
-const [throttledValue, throttler] = createThrottledValue(rawValue, {
-  wait: 1000,
-  leading: true,   // Update immediately on first change
-  trailing: false  // Skip trailing edge updates
-});
+// Use the throttled value
+console.log(throttledValue()); // Access the current throttled value
 
-// Access throttler state via signals
-console.log('Executions:', throttler.executionCount());
-console.log('Is pending:', throttler.isPending());
-console.log('Last execution:', throttler.lastExecutionTime());
-console.log('Next execution:', throttler.nextExecutionTime());
+// Control the throttler
+throttler.cancel(); // Cancel any pending updates
 ```

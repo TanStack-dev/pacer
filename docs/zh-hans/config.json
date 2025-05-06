@@ -111,15 +111,15 @@
           "to": "reference/interfaces/asyncdebounceroptions"
         },
         {
-          "label": "防抖 (debounce)",
+          "label": "防抖函数",
           "to": "reference/functions/debounce"
         },
         {
-          "label": "防抖器 (Debouncer)",
+          "label": "防抖器",
           "to": "reference/classes/debouncer"
         },
         {
-          "label": "异步防抖器 (AsyncDebouncer)",
+          "label": "异步防抖器",
           "to": "reference/classes/asyncdebouncer"
         }
       ],
@@ -153,7 +153,7 @@
           "label": "solid",
           "children": [
             {
-              "label": "Solid 防抖器 (SolidDebouncer)",
+              "label": "Solid 防抖器",
               "to": "framework/solid/reference/interfaces/soliddebouncer"
             },
             {
@@ -190,15 +190,15 @@
           "to": "reference/interfaces/asyncthrottleroptions"
         },
         {
-          "label": "节流 (throttle)",
+          "label": "节流函数",
           "to": "reference/functions/throttle"
         },
         {
-          "label": "节流器 (Throttler)",
+          "label": "节流器",
           "to": "reference/classes/throttler"
         },
         {
-          "label": "异步节流器 (AsyncThrottler)",
+          "label": "异步节流器",
           "to": "reference/classes/asyncthrottler"
         }
       ],
@@ -232,7 +232,7 @@
           "label": "solid",
           "children": [
             {
-              "label": "Solid 节流器 (SolidThrottler)",
+              "label": "Solid 节流器",
               "to": "framework/solid/reference/interfaces/solidthrottler"
             },
             {
@@ -240,7 +240,7 @@
               "to": "framework/solid/reference/functions/createthrottler"
             },
             {
-              "label": "createThrottledSignal",
+              "label": "createThrottledState",
               "to": "framework/solid/reference/functions/createthrottledsignal"
             },
             {
@@ -269,19 +269,19 @@
           "to": "reference/interfaces/asyncratelimiteroptions"
         },
         {
-          "label": "限流 (rateLimit)",
+          "label": "限流函数",
           "to": "reference/functions/ratelimit"
         },
         {
-          "label": "异步限流 (asyncRateLimit)",
+          "label": "异步限流函数",
           "to": "reference/functions/asyncratelimit"
         },
         {
-          "label": "限流器 (RateLimiter)",
+          "label": "限流器",
           "to": "reference/classes/ratelimiter"
         },
         {
-          "label": "异步限流器 (AsyncRateLimiter)",
+          "label": "异步限流器",
           "to": "reference/classes/asyncratelimiter"
         }
       ],
@@ -311,7 +311,7 @@
           "label": "solid",
           "children": [
             {
-              "label": "Solid 限流器 (SolidRateLimiter)",
+              "label": "Solid 限流器",
               "to": "framework/solid/reference/interfaces/solidratelimiter"
             },
             {
@@ -348,11 +348,11 @@
           "to": "reference/interfaces/asyncqueueroptions"
         },
         {
-          "label": "队列器 (Queuer)",
+          "label": "队列器",
           "to": "reference/classes/queuer"
         },
         {
-          "label": "异步队列器 (AsyncQueuer)",
+          "label": "异步队列器",
           "to": "reference/classes/asyncqueuer"
         }
       ],
@@ -365,7 +365,7 @@
               "to": "framework/react/reference/functions/usequeuer"
             },
             {
-              "label": "useQueuerState",
+              "label": "useQueuedState",
               "to": "framework/react/reference/functions/usequeuerstate"
             },
             {
@@ -378,7 +378,7 @@
           "label": "solid",
           "children": [
             {
-              "label": "Solid 队列器 (SolidQueuer)",
+              "label": "Solid 队列器",
               "to": "framework/solid/reference/interfaces/solidqueuer"
             },
             {
@@ -401,11 +401,11 @@
           "label": "react",
           "children": [
             {
-              "label": "防抖 (debounce)",
+              "label": "防抖函数",
               "to": "framework/react/examples/debounce"
             },
             {
-              "label": "异步防抖 (asyncDebounce)",
+              "label": "异步防抖函数",
               "to": "framework/react/examples/asyncDebounce"
             },
             {
@@ -434,11 +434,11 @@
           "label": "solid",
           "children": [
             {
-              "label": "防抖 (debounce)",
+              "label": "防抖函数",
               "to": "framework/solid/examples/debounce"
             },
             {
-              "label": "异步防抖 (asyncDebounce)",
+              "label": "异步防抖函数",
               "to": "framework/solid/examples/asyncDebounce"
             },
             {
@@ -446,7 +446,7 @@
               "to": "framework/solid/examples/createDebouncer"
             },
             {
-              "label": "createDebouncedSignal",
+              "label": "createDebouncedState",
               "to": "framework/solid/examples/createDebouncedSignal"
             },
             {
@@ -469,11 +469,11 @@
           "label": "react",
           "children": [
             {
-              "label": "节流 (throttle)",
+              "label": "节流函数",
               "to": "framework/react/examples/throttle"
             },
             {
-              "label": "异步节流 (asyncThrottle)",
+              "label": "异步节流函数",
               "to": "framework/react/examples/asyncThrottle"
             },
             {
@@ -502,11 +502,11 @@
           "label": "solid",
           "children": [
             {
-              "label": "节流 (throttle)",
+              "label": "节流函数",
               "to": "framework/solid/examples/throttle"
             },
             {
-              "label": "异步节流 (asyncThrottle)",
+              "label": "异步节流函数",
               "to": "framework/solid/examples/asyncThrottle"
             },
             {
@@ -537,11 +537,11 @@
           "label": "react",
           "children": [
             {
-              "label": "限流 (rateLimit)",
+              "label": "限流函数",
               "to": "framework/react/examples/rateLimit"
             },
             {
-              "label": "异步限流 (asyncRateLimit)",
+              "label": "异步限流函数",
               "to": "framework/react/examples/asyncRateLimit"
             },
             {
@@ -570,11 +570,11 @@
           "label": "solid",
           "children": [
             {
-              "label": "限流 (rateLimit)",
+              "label": "限流函数",
               "to": "framework/solid/examples/rateLimit"
             },
             {
-              "label": "异步限流 (asyncRateLimit)",
+              "label": "异步限流函数",
               "to": "framework/solid/examples/asyncRateLimit"
             },
             {
@@ -582,7 +582,7 @@
               "to": "framework/solid/examples/createRateLimiter"
             },
             {
-              "label": "createRateLimitedSignal",
+              "label": "createRateLimitedState",
               "to": "framework/solid/examples/createRateLimitedSignal"
             },
             {
@@ -605,7 +605,7 @@
           "label": "react",
           "children": [
             {
-              "label": "队列 (queue)",
+              "label": "队列函数",
               "to": "framework/react/examples/queue"
             },
             {
@@ -613,16 +613,20 @@
               "to": "framework/react/examples/useQueuer"
             },
             {
-              "label": "useQueuerState",
-              "to": "framework/react/examples/useQueuerState"
+              "label": "useQueuedState",
+              "to": "framework/react/examples/useQueuedState"
+            },
+            {
+              "label": "useQueuedValue",
+              "to": "framework/react/examples/useQueuedValue"
             },
             {
               "label": "useAsyncQueuer",
               "to": "framework/react/examples/useAsyncQueuer"
             },
             {
-              "label": "useAsyncQueuerState",
-              "to": "framework/react/examples/useAsyncQueuerState"
+              "label": "useAsyncQueuedState",
+              "to": "framework/react/examples/useAsyncQueuedState"
             }
           ]
         },
@@ -630,7 +634,7 @@
           "label": "solid",
           "children": [
             {
-              "label": "队列 (queue)",
+              "label": "队列函数",
               "to": "framework/solid/examples/queue"
             },
             {
@@ -640,6 +644,29 @@
             {
               "label": "createAsyncQueuer",
               "to": "framework/solid/examples/createAsyncQueuer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "高级示例",
+      "children": [],
+      "frameworks": [
+        {
+          "label": "react",
+          "children": [
+            {
+              "label": "React Query 防抖预取",
+              "to": "framework/react/examples/react-query-debounced-prefetch"
+            },
+            {
+              "label": "React Query 节流预取",
+              "to": "framework/react/examples/react-query-throttled-prefetch"
+            },
+            {
+              "label": "React Query 队列预取",
+              "to": "framework/react/examples/react-query-queued-prefetch"
             }
           ]
         }

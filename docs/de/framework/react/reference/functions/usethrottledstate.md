@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-02T04:28:52.948Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:12:04.593Z'
 id: useThrottledState
 title: useThrottledState
 ---
@@ -10,10 +10,10 @@ title: useThrottledState
 # Function: useThrottledState()
 
 ```ts
-function useThrottledState<TValue>(value, options): [TValue, Dispatch<SetStateAction<TValue>>, Throttler<Dispatch<SetStateAction<TValue>>, [TValue]>]
+function useThrottledState<TValue>(value, options): [TValue, Dispatch<SetStateAction<TValue>>, Throttler<Dispatch<SetStateAction<TValue>>>]
 ```
 
-Defined in: [throttler/useThrottledState.ts:40](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/throttler/useThrottledState.ts#L40)
+Defined in: [react-pacer/src/throttler/useThrottledState.ts:40](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/throttler/useThrottledState.ts#L40)
 
 A React hook that creates a throttled state value that updates at most once within a specified time window.
 This hook combines React's useState with throttling functionality to provide controlled state updates.
@@ -41,11 +41,11 @@ consider using the lower-level useThrottler hook instead.
 
 ### options
 
-`ThrottlerOptions`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>, \[`SetStateAction`\<`TValue`\>\]\>
+`ThrottlerOptions`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>\>
 
 ## Returns
 
-\[`TValue`, `Dispatch`\<`SetStateAction`\<`TValue`\>\>, `Throttler`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>, \[`TValue`\]\>\]
+\[`TValue`, `Dispatch`\<`SetStateAction`\<`TValue`\>\>, `Throttler`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>\>\]
 
 ## Example
 

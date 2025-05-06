@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-02T04:28:53.040Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:12:04.574Z'
 id: createAsyncRateLimiter
 title: createAsyncRateLimiter
 ---
@@ -10,10 +10,10 @@ title: createAsyncRateLimiter
 # Function: createAsyncRateLimiter()
 
 ```ts
-function createAsyncRateLimiter<TFn, TArgs>(fn, initialOptions): SolidAsyncRateLimiter<TFn, TArgs>
+function createAsyncRateLimiter<TFn>(fn, initialOptions): SolidAsyncRateLimiter<TFn>
 ```
 
-Defined in: [async-rate-limiter/createAsyncRateLimiter.ts:60](https://github.com/TanStack/pacer/blob/main/packages/solid-pacer/src/async-rate-limiter/createAsyncRateLimiter.ts#L60)
+Defined in: [async-rate-limiter/createAsyncRateLimiter.ts:62](https://github.com/TanStack/pacer/blob/main/packages/solid-pacer/src/async-rate-limiter/createAsyncRateLimiter.ts#L62)
 
 A low-level Solid hook that creates an `AsyncRateLimiter` instance to limit how many times an async function can execute within a time window.
 
@@ -28,8 +28,6 @@ managing resource constraints, or controlling bursts of async operations.
 
 • **TFn** *extends* `AnyAsyncFunction`
 
-• **TArgs** *extends* `any`[]
-
 ## Parameters
 
 ### fn
@@ -38,11 +36,11 @@ managing resource constraints, or controlling bursts of async operations.
 
 ### initialOptions
 
-`AsyncRateLimiterOptions`\<`TFn`, `TArgs`\>
+`AsyncRateLimiterOptions`\<`TFn`\>
 
 ## Returns
 
-[`SolidAsyncRateLimiter`](../interfaces/solidasyncratelimiter.md)\<`TFn`, `TArgs`\>
+[`SolidAsyncRateLimiter`](../interfaces/solidasyncratelimiter.md)\<`TFn`\>
 
 ## Example
 

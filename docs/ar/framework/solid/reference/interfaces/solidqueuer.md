@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-02T04:38:02.396Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:20:00.359Z'
 id: SolidQueuer
 title: SolidQueuer
 ---
@@ -113,12 +113,24 @@ Signal version of `getPeek`
 
 ***
 
+### rejectionCount
+
+```ts
+rejectionCount: Accessor<number>;
+```
+
+Defined in: [queuer/createQueuer.ts:50](https://github.com/TanStack/pacer/blob/main/packages/solid-pacer/src/queuer/createQueuer.ts#L50)
+
+Signal version of `getRejectionCount`
+
+***
+
 ### size
 
 ```ts
 size: Accessor<number>;
 ```
 
-Defined in: [queuer/createQueuer.ts:50](https://github.com/TanStack/pacer/blob/main/packages/solid-pacer/src/queuer/createQueuer.ts#L50)
+Defined in: [queuer/createQueuer.ts:54](https://github.com/TanStack/pacer/blob/main/packages/solid-pacer/src/queuer/createQueuer.ts#L54)
 
 Signal version of `getSize`

@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-02T04:18:14.789Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:02:12.818Z'
 id: useQueuer
 title: useQueuer
 ---
@@ -13,7 +13,7 @@ title: useQueuer
 function useQueuer<TValue>(options): Queuer<TValue>
 ```
 
-Defined in: [queuer/useQueuer.ts:44](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/queuer/useQueuer.ts#L44)
+Defined in: [react-pacer/src/queuer/useQueuer.ts:44](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/queuer/useQueuer.ts#L44)
 
 A React hook that creates and manages a Queuer instance.
 
@@ -21,7 +21,7 @@ This is a lower-level hook that provides direct access to the Queuer's functiona
 any built-in state management. This allows you to integrate it with any state management solution
 you prefer (useState, Redux, Zustand, etc.) by utilizing the onItemsChange callback.
 
-For a hook with built-in state management, see useQueuerState.
+For a hook with built-in state management, see useQueuedState.
 
 The Queuer extends the base Queue to add processing capabilities. Items are processed
 synchronously in order, with optional delays between processing each item. The queuer includes

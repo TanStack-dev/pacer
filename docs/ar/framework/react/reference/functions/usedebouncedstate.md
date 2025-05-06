@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-02T04:38:02.202Z'
+source-updated-at: '2025-05-05T07:34:55.000Z'
+translation-updated-at: '2025-05-06T23:20:00.476Z'
 id: useDebouncedState
 title: useDebouncedState
 ---
@@ -10,10 +10,10 @@ title: useDebouncedState
 # Function: useDebouncedState()
 
 ```ts
-function useDebouncedState<TValue>(value, options): [TValue, Dispatch<SetStateAction<TValue>>, Debouncer<Dispatch<SetStateAction<TValue>>, [TValue]>]
+function useDebouncedState<TValue>(value, options): [TValue, Dispatch<SetStateAction<TValue>>, Debouncer<Dispatch<SetStateAction<TValue>>>]
 ```
 
-Defined in: [debouncer/useDebouncedState.ts:38](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/debouncer/useDebouncedState.ts#L38)
+Defined in: [react-pacer/src/debouncer/useDebouncedState.ts:38](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/debouncer/useDebouncedState.ts#L38)
 
 A React hook that creates a debounced state value, combining React's useState with debouncing functionality.
 This hook provides both the current debounced value and methods to update it.
@@ -40,11 +40,11 @@ The hook returns a tuple containing:
 
 ### options
 
-`DebouncerOptions`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>, \[`SetStateAction`\<`TValue`\>\]\>
+`DebouncerOptions`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>\>
 
 ## Returns
 
-\[`TValue`, `Dispatch`\<`SetStateAction`\<`TValue`\>\>, `Debouncer`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>, \[`TValue`\]\>\]
+\[`TValue`, `Dispatch`\<`SetStateAction`\<`TValue`\>\>, `Debouncer`\<`Dispatch`\<`SetStateAction`\<`TValue`\>\>\>\]
 
 ## Example
 
