@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-06T20:42:13.857Z'
+source-updated-at: '2025-05-08T02:24:20.000Z'
+translation-updated-at: '2025-05-08T05:53:43.212Z'
 id: asyncDebounce
 title: asyncDebounce
 ---
@@ -10,20 +10,22 @@ title: asyncDebounce
 # Function: asyncDebounce()
 
 ```ts
-function asyncDebounce<TFn, TArgs>(fn, initialOptions): (...args) => Promise<void>
+function asyncDebounce<TFn>(fn, initialOptions): (...args) => Promise<undefined | ReturnType<TFn>>
 ```
 
-Defined in: [async-debouncer.ts:219](https://github.com/TanStack/pacer/blob/main/packages/pacer/src/async-debouncer.ts#L219)
+Defined in: [async-debouncer.ts:268](https://github.com/TanStack/pacer/blob/main/packages/pacer/src/async-debouncer.ts#L268)
 
 Creates an async debounced function that delays execution until after a specified wait time.
 The debounced function will only execute once the wait period has elapsed without any new calls.
 If called again during the wait period, the timer resets and a new wait period begins.
 
+Unlike the non-async Debouncer, this async version supports returning values from the debounced function,
+making it ideal for API calls and other async operations where you want the result of the `maybeExecute` call
+instead of setting the result on a state variable from within the debounced function.
+
 ## Type Parameters
 
 • **TFn** *extends* [`AnyAsyncFunction`](../type-aliases/anyasyncfunction.md)
-
-• **TArgs** *extends* `any`[]
 
 ## Parameters
 
@@ -33,7 +35,7 @@ If called again during the wait period, the timer resets and a new wait period b
 
 ### initialOptions
 
-`Omit`\<[`AsyncDebouncerOptions`](../interfaces/asyncdebounceroptions.md)\<`TFn`, `TArgs`\>, `"enabled"`\>
+`Omit`\<[`AsyncDebouncerOptions`](../interfaces/asyncdebounceroptions.md)\<`TFn`\>, `"enabled"`\>
 
 ## Returns
 
@@ -46,21 +48,21 @@ If a call is already in progress, it will be queued
 
 #### args
 
-...`TArgs`
+...`Parameters`\<`TFn`\>
 
 ### Returns
 
-`Promise`\<`void`\>
+`Promise`\<`undefined` \| `ReturnType`\<`TFn`\>\>
 
 ## Example
 
 ```ts
 const debounced = asyncDebounce(async (value: string) => {
-  await saveToAPI(value);
+  const result = await saveToAPI(value);
+  return result; // Return value is preserved
 }, { wait: 1000 });
 
 // Will only execute once, 1 second after the last call
-await debounced("first");  // Cancelled
-await debounced("second"); // Cancelled
-await debounced("third");  // Executes after 1s
+// Returns the API response directly
+const result = await debounced("third");
 ```

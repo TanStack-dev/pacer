@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-06T20:27:49.580Z'
+source-updated-at: '2025-05-08T02:24:20.000Z'
+translation-updated-at: '2025-05-08T05:45:08.624Z'
 id: asyncThrottle
 title: asyncThrottle
 ---
@@ -10,20 +10,22 @@ title: asyncThrottle
 # Function: asyncThrottle()
 
 ```ts
-function asyncThrottle<TFn, TArgs>(fn, initialOptions): (...args) => Promise<void>
+function asyncThrottle<TFn>(fn, initialOptions): (...args) => Promise<undefined | ReturnType<TFn>>
 ```
 
-Defined in: [async-throttler.ts:223](https://github.com/TanStack/pacer/blob/main/packages/pacer/src/async-throttler.ts#L223)
+Defined in: [async-throttler.ts:281](https://github.com/TanStack/pacer/blob/main/packages/pacer/src/async-throttler.ts#L281)
 
 Creates an async throttled function that limits how often the function can execute.
 The throttled function will execute at most once per wait period, even if called multiple times.
 If called while executing, it will wait until execution completes before scheduling the next call.
 
+Unlike the non-async Throttler, this async version supports returning values from the throttled function,
+making it ideal for API calls and other async operations where you want the result of the `maybeExecute` call
+instead of setting the result on a state variable from within the throttled function.
+
 ## Type Parameters
 
 • **TFn** *extends* [`AnyAsyncFunction`](../type-aliases/anyasyncfunction.md)
-
-• **TArgs** *extends* `any`[]
 
 ## Parameters
 
@@ -33,7 +35,7 @@ If called while executing, it will wait until execution completes before schedul
 
 ### initialOptions
 
-`Omit`\<[`AsyncThrottlerOptions`](../interfaces/asyncthrottleroptions.md)\<`TFn`, `TArgs`\>, `"enabled"`\>
+`Omit`\<[`AsyncThrottlerOptions`](../interfaces/asyncthrottleroptions.md)\<`TFn`\>, `"enabled"`\>
 
 ## Returns
 
@@ -46,20 +48,21 @@ If a call is already in progress, it may be blocked or queued depending on the `
 
 #### args
 
-...`TArgs`
+...`Parameters`\<`TFn`\>
 
 ### Returns
 
-`Promise`\<`void`\>
+`Promise`\<`undefined` \| `ReturnType`\<`TFn`\>\>
 
 ## Example
 
 ```ts
-const throttled = asyncThrottle(async () => {
-  await someAsyncOperation();
+const throttled = asyncThrottle(async (value: string) => {
+  const result = await saveToAPI(value);
+  return result; // Return value is preserved
 }, { wait: 1000 });
 
 // This will execute at most once per second
-await throttled();
-await throttled(); // Waits 1 second before executing
+// Returns the API response directly
+const result = await throttled(inputElement.value);
 ```

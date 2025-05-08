@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-05-05T07:34:55.000Z'
-translation-updated-at: '2025-05-06T23:14:43.260Z'
+source-updated-at: '2025-05-08T02:24:20.000Z'
+translation-updated-at: '2025-05-08T05:56:39.554Z'
 id: useRateLimitedValue
 title: useRateLimitedValue
 ---
@@ -13,7 +13,7 @@ title: useRateLimitedValue
 function useRateLimitedValue<TValue>(value, options): [TValue, RateLimiter<Dispatch<SetStateAction<TValue>>>]
 ```
 
-Defined in: [react-pacer/src/rate-limiter/useRateLimitedValue.ts:47](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/rate-limiter/useRateLimitedValue.ts#L47)
+Defined in: [react-pacer/src/rate-limiter/useRateLimitedValue.ts:55](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/rate-limiter/useRateLimitedValue.ts#L55)
 
 A high-level React hook that creates a rate-limited version of a value that updates at most a certain number of times within a time window.
 This hook uses React's useState internally to manage the rate-limited state.
@@ -21,6 +21,12 @@ This hook uses React's useState internally to manage the rate-limited state.
 Rate limiting is a simple "hard limit" approach - it allows all updates until the limit is reached, then blocks
 subsequent updates until the window resets. Unlike throttling or debouncing, it does not attempt to space out
 or intelligently collapse updates. This can lead to bursts of rapid updates followed by periods of no updates.
+
+The rate limiter supports two types of windows:
+- 'fixed': A strict window that resets after the window period. All updates within the window count
+  towards the limit, and the window resets completely after the period.
+- 'sliding': A rolling window that allows updates as old ones expire. This provides a more
+  consistent rate of updates over time.
 
 For smoother update patterns, consider:
 - useThrottledValue: When you want consistent spacing between updates (e.g. UI changes)
@@ -56,16 +62,18 @@ consider using the lower-level useRateLimiter hook instead.
 ## Example
 
 ```tsx
-// Basic rate limiting - update at most 5 times per minute
+// Basic rate limiting - update at most 5 times per minute with a sliding window
 const [rateLimitedValue, rateLimiter] = useRateLimitedValue(rawValue, {
   limit: 5,
-  window: 60000
+  window: 60000,
+  windowType: 'sliding'
 });
 
-// With rejection callback
+// With rejection callback and fixed window
 const [rateLimitedValue, rateLimiter] = useRateLimitedValue(rawValue, {
   limit: 3,
   window: 5000,
+  windowType: 'fixed',
   onReject: (rateLimiter) => {
     console.log(`Update rejected. Try again in ${rateLimiter.getMsUntilNextWindow()}ms`);
   }

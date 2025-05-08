@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-05-05T07:34:55.000Z'
-translation-updated-at: '2025-05-06T23:06:43.703Z'
+source-updated-at: '2025-05-08T02:24:20.000Z'
+translation-updated-at: '2025-05-08T05:47:46.093Z'
 id: useRateLimiter
 title: useRateLimiter
 ---
@@ -13,7 +13,7 @@ title: useRateLimiter
 function useRateLimiter<TFn>(fn, options): RateLimiter<TFn>
 ```
 
-Defined in: [react-pacer/src/rate-limiter/useRateLimiter.ts:48](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/rate-limiter/useRateLimiter.ts#L48)
+Defined in: [react-pacer/src/rate-limiter/useRateLimiter.ts:55](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/rate-limiter/useRateLimiter.ts#L55)
 
 A low-level React hook that creates a `RateLimiter` instance to enforce rate limits on function execution.
 
@@ -23,6 +23,12 @@ you can integrate with any state management solution (useState, Redux, Zustand, 
 Rate limiting is a simple "hard limit" approach that allows executions until a maximum count is reached within
 a time window, then blocks all subsequent calls until the window resets. Unlike throttling or debouncing,
 it does not attempt to space out or collapse executions intelligently.
+
+The rate limiter supports two types of windows:
+- 'fixed': A strict window that resets after the window period. All executions within the window count
+  towards the limit, and the window resets completely after the period.
+- 'sliding': A rolling window that allows executions as old ones expire. This provides a more
+  consistent rate of execution over time.
 
 For smoother execution patterns:
 - Use throttling when you want consistent spacing between executions (e.g. UI updates)
@@ -57,10 +63,11 @@ The hook returns an object containing:
 ## Example
 
 ```tsx
-// Basic rate limiting - max 5 calls per minute
+// Basic rate limiting - max 5 calls per minute with a sliding window
 const { maybeExecute } = useRateLimiter(apiCall, {
   limit: 5,
   window: 60000,
+  windowType: 'sliding',
 });
 
 // Monitor rate limit status
