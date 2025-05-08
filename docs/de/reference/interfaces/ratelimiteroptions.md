@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-05-05T07:34:55.000Z'
-translation-updated-at: '2025-05-06T23:12:04.417Z'
+source-updated-at: '2025-05-08T02:24:20.000Z'
+translation-updated-at: '2025-05-08T05:53:43.193Z'
 id: RateLimiterOptions
 title: RateLimiterOptions
 ---
@@ -97,3 +97,18 @@ window: number;
 Defined in: [rate-limiter.ts:27](https://github.com/TanStack/pacer/blob/main/packages/pacer/src/rate-limiter.ts#L27)
 
 Time window in milliseconds within which the limit applies
+
+***
+
+### windowType?
+
+```ts
+optional windowType: "fixed" | "sliding";
+```
+
+Defined in: [rate-limiter.ts:34](https://github.com/TanStack/pacer/blob/main/packages/pacer/src/rate-limiter.ts#L34)
+
+Type of window to use for rate limiting
+- 'fixed': Uses a fixed window that resets after the window period
+- 'sliding': Uses a sliding window that allows executions as old ones expire
+Defaults to 'fixed'

@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-04-24T02:14:56.000Z'
-translation-updated-at: '2025-05-06T20:42:13.884Z'
+source-updated-at: '2025-05-08T02:24:20.000Z'
+translation-updated-at: '2025-05-08T05:53:43.265Z'
 id: useRateLimitedCallback
 title: useRateLimitedCallback
 ---
@@ -13,7 +13,7 @@ title: useRateLimitedCallback
 function useRateLimitedCallback<TFn, TArgs>(fn, options): (...args) => boolean
 ```
 
-Defined in: [rate-limiter/useRateLimitedCallback.ts:52](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/rate-limiter/useRateLimitedCallback.ts#L52)
+Defined in: [react-pacer/src/rate-limiter/useRateLimitedCallback.ts:59](https://github.com/TanStack/pacer/blob/main/packages/react-pacer/src/rate-limiter/useRateLimitedCallback.ts#L59)
 
 A React hook that creates a rate-limited version of a callback function.
 This hook is essentially a wrapper around the basic `rateLimiter` function
@@ -25,6 +25,12 @@ is reached, then blocks subsequent calls until the window resets. Unlike throttl
 or debouncing, it does not attempt to space out or intelligently collapse calls.
 This can lead to bursts of rapid executions followed by periods where all calls
 are blocked.
+
+The rate limiter supports two types of windows:
+- 'fixed': A strict window that resets after the window period. All executions within the window count
+  towards the limit, and the window resets completely after the period.
+- 'sliding': A rolling window that allows executions as old ones expire. This provides a more
+  consistent rate of execution over time.
 
 For smoother execution patterns, consider:
 - useThrottledCallback: When you want consistent spacing between executions (e.g. UI updates)
@@ -57,7 +63,7 @@ Consider using the `useRateLimiter` hook instead.
 
 ### options
 
-`RateLimiterOptions`\<`TFn`, `TArgs`\>
+`RateLimiterOptions`\<`TFn`\>
 
 ## Returns
 
@@ -76,7 +82,7 @@ Consider using the `useRateLimiter` hook instead.
 ## Example
 
 ```tsx
-// Rate limit API calls to maximum 5 calls per minute
+// Rate limit API calls to maximum 5 calls per minute with a sliding window
 const makeApiCall = useRateLimitedCallback(
   (data: ApiData) => {
     return fetch('/api/endpoint', { method: 'POST', body: JSON.stringify(data) });
@@ -84,6 +90,7 @@ const makeApiCall = useRateLimitedCallback(
   {
     limit: 5,
     window: 60000, // 1 minute
+    windowType: 'sliding',
     onReject: () => {
       console.warn('API rate limit reached. Please wait before trying again.');
     }

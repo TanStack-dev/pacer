@@ -1,6 +1,6 @@
 ---
-source-updated-at: '2025-05-05T07:34:55.000Z'
-translation-updated-at: '2025-05-06T23:14:43.196Z'
+source-updated-at: '2025-05-08T02:24:20.000Z'
+translation-updated-at: '2025-05-08T05:56:39.536Z'
 id: createRateLimitedValue
 title: createRateLimitedValue
 ---
@@ -13,7 +13,7 @@ title: createRateLimitedValue
 function createRateLimitedValue<TValue>(value, initialOptions): [Accessor<TValue>, SolidRateLimiter<Setter<TValue>>]
 ```
 
-Defined in: [rate-limiter/createRateLimitedValue.ts:43](https://github.com/TanStack/pacer/blob/main/packages/solid-pacer/src/rate-limiter/createRateLimitedValue.ts#L43)
+Defined in: [rate-limiter/createRateLimitedValue.ts:50](https://github.com/TanStack/pacer/blob/main/packages/solid-pacer/src/rate-limiter/createRateLimitedValue.ts#L50)
 
 A high-level Solid hook that creates a rate-limited version of a value that updates at most a certain number of times within a time window.
 This hook uses Solid's createSignal internally to manage the rate-limited state.
@@ -21,6 +21,12 @@ This hook uses Solid's createSignal internally to manage the rate-limited state.
 Rate limiting is a simple "hard limit" approach - it allows all updates until the limit is reached, then blocks
 subsequent updates until the window resets. Unlike throttling or debouncing, it does not attempt to space out
 or intelligently collapse updates. This can lead to bursts of rapid updates followed by periods of no updates.
+
+The rate limiter supports two types of windows:
+- 'fixed': A strict window that resets after the window period. All updates within the window count
+  towards the limit, and the window resets completely after the period.
+- 'sliding': A rolling window that allows updates as old ones expire. This provides a more
+  consistent rate of updates over time.
 
 For smoother update patterns, consider:
 - createThrottledValue: When you want consistent spacing between updates (e.g. UI changes)
@@ -56,10 +62,11 @@ consider using the lower-level createRateLimiter hook instead.
 ## Example
 
 ```tsx
-// Basic rate limiting - update at most 5 times per minute
+// Basic rate limiting - update at most 5 times per minute with a sliding window
 const [rateLimitedValue, rateLimiter] = createRateLimitedValue(rawValue, {
   limit: 5,
-  window: 60000
+  window: 60000,
+  windowType: 'sliding'
 });
 
 // Use the rate-limited value

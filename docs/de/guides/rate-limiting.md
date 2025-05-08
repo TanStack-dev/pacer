@@ -1,19 +1,19 @@
 ---
-source-updated-at: '2025-05-05T07:34:55.000Z'
-translation-updated-at: '2025-05-06T23:14:42.635Z'
-title: Ratenbegrenzungs-Anleitung
+source-updated-at: '2025-05-08T02:24:20.000Z'
+translation-updated-at: '2025-05-08T05:56:39.060Z'
+title: Anleitung zur Ratenbegrenzung
 id: rate-limiting
 ---
 # Rate Limiting Guide (Anleitung zur Ratenbegrenzung)
 
-Rate Limiting (Ratenbegrenzung), Throttling (Drosselung) und Debouncing (Entprellung) sind drei verschiedene Ansätze zur Steuerung der Ausführungsfrequenz von Funktionen. Jede Technik blockiert Ausführungen auf unterschiedliche Weise, wodurch sie "verlustbehaftet" sind – das bedeutet, dass einige Funktionsaufrufe nicht ausgeführt werden, wenn sie zu häufig angefordert werden. Das Verständnis, wann welcher Ansatz anzuwenden ist, ist entscheidend für die Entwicklung performanter und zuverlässiger Anwendungen. Diese Anleitung behandelt die Rate-Limiting-Konzepte von TanStack Pacer.
+Rate Limiting (Ratenbegrenzung), Throttling (Drosselung) und Debouncing (Entprellung) sind drei verschiedene Ansätze zur Steuerung der Ausführungsfrequenz von Funktionen. Jede Technik blockiert Ausführungen auf unterschiedliche Weise, wodurch sie "verlustbehaftet" sind – das bedeutet, dass einige Funktionsaufrufe nicht ausgeführt werden, wenn sie zu häufig angefordert werden. Das Verständnis, wann welcher Ansatz anzuwenden ist, ist entscheidend für die Entwicklung leistungsfähiger und zuverlässiger Anwendungen. Diese Anleitung behandelt die Rate-Limiting-Konzepte von TanStack Pacer.
 
 > [!NOTE]
-> TanStack Pacer ist derzeit nur eine Frontend-Bibliothek. Dies sind Hilfsmittel für clientseitige Ratenbegrenzung.
+> TanStack Pacer ist derzeit nur eine Front-End-Bibliothek. Dies sind Hilfsmittel für clientseitige Ratenbegrenzung.
 
 ## Konzept der Ratenbegrenzung
 
-Rate Limiting (Ratenbegrenzung) ist eine Technik, die die Rate begrenzt, mit der eine Funktion innerhalb eines bestimmten Zeitfensters ausgeführt werden kann. Sie ist besonders nützlich für Szenarien, in denen verhindert werden soll, dass eine Funktion zu häufig aufgerufen wird, z. B. bei der Abwicklung von API-Anfragen oder anderen Aufrufen externer Dienste. Es ist der *einfachste* Ansatz, da er Ausführungen in Bursts erlaubt, bis das Kontingent erschöpft ist.
+Rate Limiting ist eine Technik, die die Rate begrenzt, mit der eine Funktion innerhalb eines bestimmten Zeitfensters ausgeführt werden kann. Sie ist besonders nützlich für Szenarien, in denen verhindert werden soll, dass eine Funktion zu häufig aufgerufen wird, z. B. bei der Abwicklung von API-Anfragen oder anderen Aufrufen externer Dienste. Es handelt sich um den *naivsten* Ansatz, da er Ausführungen in Bursts erlaubt, bis das Kontingent erschöpft ist.
 
 ### Visualisierung der Ratenbegrenzung
 
@@ -21,32 +21,61 @@ Rate Limiting (Ratenbegrenzung) ist eine Technik, die die Rate begrenzt, mit der
 Rate Limiting (limit: 3 calls per window)
 Timeline: [1 second per tick]
                                         Window 1                  |    Window 2            
-Calls:        ⬇️     ⬇️     ⬇️     ⬇️     ⬇️                             ⬇️     �️
+Calls:        ⬇️     ⬇️     ⬇️     ⬇️     ⬇️                             ⬇️     ⬇️
 Executed:     ✅     ✅     ✅     ❌     ❌                             ✅     ✅
              [=== 3 allowed ===][=== blocked until window ends ===][=== new window =======]
 ```
 
+### Fenstertypen
+
+TanStack Pacer unterstützt zwei Arten von Ratenbegrenzungsfenstern:
+
+1. **Festes Fenster (Fixed Window)** (Standard)
+   - Ein strenges Fenster, das nach dem Fensterzeitraum zurückgesetzt wird
+   - Alle Ausführungen innerhalb des Fensters zählen zur Begrenzung
+   - Das Fenster wird nach dem Zeitraum vollständig zurückgesetzt
+   - Kann zu burstartigem Verhalten an den Fenstergrenzen führen
+
+2. **Gleitendes Fenster (Sliding Window)**
+   - Ein rollierendes Fenster, das Ausführungen zulässt, sobald ältere ablaufen
+   - Ermöglicht eine gleichmäßigere Ausführungsrate über die Zeit
+   - Besser geeignet, um einen stetigen Ausführungsfluss aufrechtzuerhalten
+   - Verhindert burstartiges Verhalten an den Fenstergrenzen
+
+Hier eine Visualisierung der Ratenbegrenzung mit gleitendem Fenster:
+
+```text
+Sliding Window Rate Limiting (limit: 3 calls per window)
+Timeline: [1 second per tick]
+                                        Window 1                  |    Window 2            
+Calls:        ⬇️     ⬇️     ⬇️     ⬇️     ⬇️                             ⬇️     ⬇️
+Executed:     ✅     ✅     ✅     ❌     ✅                             ✅     ✅
+             [=== 3 allowed ===][=== oldest expires, new allowed ===][=== continues sliding =======]
+```
+
+Der entscheidende Unterschied besteht darin, dass bei einem gleitenden Fenster eine neue Ausführung zugelassen wird, sobald die älteste Ausführung abläuft. Dies führt im Vergleich zum festen Fensteransatz zu einem gleichmäßigeren Ausführungsfluss.
+
 ### Wann Ratenbegrenzung verwendet werden sollte
 
-Rate Limiting (Ratenbegrenzung) ist besonders wichtig, wenn es um Frontend-Operationen geht, die versehentlich Backend-Dienste überlasten oder Leistungsprobleme im Browser verursachen könnten.
+Rate Limiting ist besonders wichtig bei Front-End-Operationen, die versehentlich Ihre Back-End-Dienste überlasten oder Leistungsprobleme im Browser verursachen könnten.
 
 Häufige Anwendungsfälle sind:
-- Verhinderung versehentlicher API-Spam durch schnelle Benutzerinteraktionen (z. B. Button-Klicks oder Formularübermittlungen)
+- Verhindern von versehentlichem API-Spam durch schnelle Benutzerinteraktionen (z. B. Button-Klicks oder Formularübermittlungen)
 - Szenarien, in denen burstartiges Verhalten akzeptabel ist, aber die maximale Rate begrenzt werden soll
 - Schutz vor versehentlichen Endlosschleifen oder rekursiven Operationen
 
 ### Wann Ratenbegrenzung nicht verwendet werden sollte
 
-Rate Limiting (Ratenbegrenzung) ist der einfachste Ansatz zur Steuerung der Ausführungsfrequenz von Funktionen. Es ist die unflexibelste und restriktivste der drei Techniken. Erwägen Sie stattdessen die Verwendung von [Throttling](../guides/throttling) oder [Debouncing](../guides/debouncing) für gleichmäßiger verteilte Ausführungen.
+Rate Limiting ist der naivste Ansatz zur Steuerung der Ausführungsfrequenz von Funktionen. Es ist die unflexibelste und restriktivste der drei Techniken. Erwägen Sie stattdessen die Verwendung von [Throttling](../guides/throttling) oder [Debouncing](../guides/debouncing) für gleichmäßiger verteilte Ausführungen.
 
 > [!TIP]
 > In den meisten Fällen möchten Sie wahrscheinlich keine "Ratenbegrenzung" verwenden. Erwägen Sie stattdessen die Verwendung von [Throttling](../guides/throttling) oder [Debouncing](../guides/debouncing).
 
-Die "verlustbehaftete" Natur der Ratenbegrenzung bedeutet auch, dass einige Ausführungen abgelehnt und verloren gehen. Dies kann ein Problem sein, wenn Sie sicherstellen müssen, dass alle Ausführungen immer erfolgreich sind. Erwägen Sie die Verwendung von [Queueing](../guides/queueing), wenn Sie sicherstellen müssen, dass alle Ausführungen in eine Warteschlange gestellt werden, um mit einer gedrosselten Verzögerung ausgeführt zu werden, um die Ausführungsrate zu verlangsamen.
+Die "verlustbehaftete" Natur der Ratenbegrenzung bedeutet auch, dass einige Ausführungen abgelehnt und verloren gehen. Dies kann ein Problem sein, wenn Sie sicherstellen müssen, dass alle Ausführungen immer erfolgreich sind. Erwägen Sie die Verwendung von [Queueing](../guides/queueing), wenn Sie sicherstellen müssen, dass alle Ausführungen in die Warteschlange gestellt werden, um mit einer gedrosselten Verzögerung ausgeführt zu werden, die die Ausführungsrate verlangsamt.
 
 ## Ratenbegrenzung in TanStack Pacer
 
-TanStack Pacer bietet sowohl synchrone als auch asynchrone Ratenbegrenzung über die Klassen `RateLimiter` und `AsyncRateLimiter` (und ihre entsprechenden Funktionen `rateLimit` und `asyncRateLimit`).
+TanStack Pacer bietet sowohl synchrone als auch asynchrone Ratenbegrenzung über die Klassen `RateLimiter` bzw. `AsyncRateLimiter` (und die entsprechenden Funktionen `rateLimit` und `asyncRateLimit`).
 
 ### Grundlegende Verwendung mit `rateLimit`
 
@@ -61,6 +90,7 @@ const rateLimitedApi = rateLimit(
   {
     limit: 5,
     window: 60 * 1000, // 1 Minute in Millisekunden
+    windowType: 'fixed', // Standard
     onReject: (rateLimiter) => {
       console.log(`Rate limit exceeded. Try again in ${rateLimiter.getMsUntilNextWindow()}ms`)
     }
@@ -103,7 +133,7 @@ console.log(limiter.getRemainingInWindow()) // Anzahl der verbleibenden Aufrufe 
 console.log(limiter.getExecutionCount()) // Gesamtzahl der erfolgreichen Ausführungen
 console.log(limiter.getRejectionCount()) // Gesamtzahl der abgelehnten Ausführungen
 
-// Versuch, auszuführen (gibt einen Boolean zurück, der den Erfolg anzeigt)
+// Versuch einer Ausführung (gibt einen booleschen Wert zurück, der den Erfolg anzeigt)
 limiter.maybeExecute('user-1')
 
 // Optionen dynamisch aktualisieren
@@ -115,7 +145,10 @@ limiter.reset()
 
 ### Aktivieren/Deaktivieren
 
-Die `RateLimiter`-Klasse unterstützt das Aktivieren/Deaktivieren über die Option `enabled`. Mit der Methode `setOptions` können Sie den Rate-Limiter jederzeit aktivieren/deaktivieren:
+Die `RateLimiter`-Klasse unterstützt das Aktivieren/Deaktivieren über die Option `enabled`. Mit der Methode `setOptions` können Sie den Rate Limiter jederzeit aktivieren/deaktivieren:
+
+> [!NOTE]
+> Die Option `enabled` aktiviert/deaktiviert die tatsächliche Funktionsausführung. Das Deaktivieren des Rate Limiters schaltet die Ratenbegrenzung nicht aus, sondern verhindert lediglich die Ausführung der Funktion.
 
 ```ts
 const limiter = new RateLimiter(fn, { 
@@ -126,13 +159,13 @@ const limiter = new RateLimiter(fn, {
 limiter.setOptions({ enabled: true }) // Jederzeit aktivieren
 ```
 
-Wenn Sie ein Framework-Adapter verwenden, bei dem die Rate-Limiter-Optionen reaktiv sind, können Sie die Option `enabled` auf einen bedingten Wert setzen, um den Rate-Limiter dynamisch zu aktivieren/deaktivieren. Wenn Sie jedoch die Funktion `rateLimit` oder die `RateLimiter`-Klasse direkt verwenden, müssen Sie die Methode `setOptions` verwenden, um die Option `enabled` zu ändern, da die übergebenen Optionen tatsächlich an den Konstruktor der `RateLimiter`-Klasse übergeben werden.
+Wenn Sie ein Framework-Adapter verwenden, bei dem die Rate-Limiter-Optionen reaktiv sind, können Sie die Option `enabled` auf einen bedingten Wert setzen, um den Rate Limiter dynamisch zu aktivieren/deaktivieren. Wenn Sie jedoch die Funktion `rateLimit` oder die Klasse `RateLimiter` direkt verwenden, müssen Sie die Methode `setOptions` verwenden, um die Option `enabled` zu ändern, da die übergebenen Optionen tatsächlich an den Konstruktor der `RateLimiter`-Klasse übergeben werden.
 
 ### Callback-Optionen
 
-Sowohl die synchronen als auch die asynchronen Rate-Limiter unterstützen Callback-Optionen zur Behandlung verschiedener Aspekte des Ratenbegrenzungs-Lebenszyklus:
+Sowohl die synchronen als auch die asynchronen Rate Limiter unterstützen Callback-Optionen zur Behandlung verschiedener Aspekte des Ratenbegrenzungs-Lebenszyklus:
 
-#### Callbacks des synchronen Rate-Limiters
+#### Callbacks des synchronen Rate Limiters
 
 Der synchrone `RateLimiter` unterstützt die folgenden Callbacks:
 
@@ -151,9 +184,9 @@ const limiter = new RateLimiter(fn, {
 })
 ```
 
-Der `onExecute`-Callback wird nach jeder erfolgreichen Ausführung der rate-limitierten Funktion aufgerufen, während der `onReject`-Callback aufgerufen wird, wenn eine Ausführung aufgrund der Ratenbegrenzung abgelehnt wird. Diese Callbacks sind nützlich für die Verfolgung von Ausführungen, die Aktualisierung des UI-Status oder die Bereitstellung von Feedback für Benutzer.
+Der Callback `onExecute` wird nach jeder erfolgreichen Ausführung der rate-limited-Funktion aufgerufen, während der Callback `onReject` aufgerufen wird, wenn eine Ausführung aufgrund der Ratenbegrenzung abgelehnt wird. Diese Callbacks sind nützlich für die Verfolgung von Ausführungen, die Aktualisierung des UI-Status oder die Bereitstellung von Feedback für Benutzer.
 
-#### Callbacks des asynchronen Rate-Limiters
+#### Callbacks des asynchronen Rate Limiters
 
 Der asynchrone `AsyncRateLimiter` unterstützt zusätzliche Callbacks für die Fehlerbehandlung:
 
@@ -178,38 +211,33 @@ const asyncLimiter = new AsyncRateLimiter(async (id) => {
 })
 ```
 
-Die Callbacks `onExecute` und `onReject` funktionieren auf die gleiche Weise wie beim synchronen Rate-Limiter, während der `onError`-Callback es Ihnen ermöglicht, Fehler elegant zu behandeln, ohne die Ratenbegrenzungskette zu unterbrechen. Diese Callbacks sind besonders nützlich für die Verfolgung von Ausführungszählern, die Aktualisierung des UI-Status, die Fehlerbehandlung und die Bereitstellung von Feedback für Benutzer.
+Die Callbacks `onExecute` und `onReject` funktionieren auf die gleiche Weise wie beim synchronen Rate Limiter, während der Callback `onError` es Ihnen ermöglicht, Fehler elegant zu behandeln, ohne die Ratenbegrenzungskette zu unterbrechen. Diese Callbacks sind besonders nützlich für die Verfolgung von Ausführungszählern, die Aktualisierung des UI-Status, die Fehlerbehandlung und die Bereitstellung von Feedback für Benutzer.
 
 ### Asynchrone Ratenbegrenzung
 
-Der asynchrone Rate-Limiter bietet eine leistungsstarke Möglichkeit, asynchrone Operationen mit Ratenbegrenzung zu handhaben, und bietet mehrere entscheidende Vorteile gegenüber der synchronen Version. Während der synchrone Rate-Limiter ideal für UI-Ereignisse und sofortiges Feedback ist, ist die asynchrone Version speziell für die Handhabung von API-Aufrufen, Datenbankoperationen und anderen asynchronen Aufgaben konzipiert.
+Der asynchrone Rate Limiter bietet eine leistungsstarke Möglichkeit, asynchrone Operationen mit Ratenbegrenzung zu handhaben, und bietet mehrere entscheidende Vorteile gegenüber der synchronen Version. Während der synchrone Rate Limiter ideal für UI-Ereignisse und sofortiges Feedback ist, ist die asynchrone Version speziell für die Handhabung von API-Aufrufen, Datenbankoperationen und anderen asynchronen Aufgaben konzipiert.
 
 #### Wichtige Unterschiede zur synchronen Ratenbegrenzung
 
-1. **Handhabung von Rückgabewerten**
-Im Gegensatz zum synchronen Rate-Limiter, der einen Boolean zurückgibt, der den Erfolg anzeigt, ermöglicht die asynchrone Version die Erfassung und Verwendung des Rückgabewerts Ihrer rate-limitierten Funktion. Dies ist besonders nützlich, wenn Sie mit den Ergebnissen von API-Aufrufen oder anderen asynchronen Operationen arbeiten müssen. Die Methode `maybeExecute` gibt ein Promise zurück, das mit dem Rückgabewert der Funktion aufgelöst wird, sodass Sie auf das Ergebnis warten und es entsprechend verarbeiten können.
+1. **Behandlung von Rückgabewerten**
+Im Gegensatz zum synchronen Rate Limiter, der einen booleschen Wert zurückgibt, der den Erfolg anzeigt, ermöglicht die asynchrone Version die Erfassung und Verwendung des Rückgabewerts Ihrer rate-limited-Funktion. Dies ist besonders nützlich, wenn Sie mit den Ergebnissen von API-Aufrufen oder anderen asynchronen Operationen arbeiten müssen. Die Methode `maybeExecute` gibt ein Promise zurück, das mit dem Rückgabewert der Funktion aufgelöst wird, sodass Sie das Ergebnis erwarten und entsprechend behandeln können.
 
-2. **Erweitertes Callback-System**
-Der asynchrone Rate-Limiter bietet ein ausgefeilteres Callback-System im Vergleich zu den Callbacks der synchronen Version. Dieses System umfasst:
-- `onExecute`: Wird nach jeder erfolgreichen Ausführung aufgerufen und stellt die Rate-Limiter-Instanz bereit
-- `onReject`: Wird aufgerufen, wenn eine Ausführung aufgrund der Ratenbegrenzung abgelehnt wird, und stellt die Rate-Limiter-Instanz bereit
+2. **Unterschiedliche Callbacks**
+Der `AsyncRateLimiter` unterstützt die folgenden Callbacks anstelle von nur `onExecute` in der synchronen Version:
+- `onSuccess`: Wird nach jeder erfolgreichen Ausführung aufgerufen und stellt die Rate-Limiter-Instanz bereit
+- `onSettled`: Wird nach jeder Ausführung aufgerufen und stellt die Rate-Limiter-Instanz bereit
 - `onError`: Wird aufgerufen, wenn die asynchrone Funktion einen Fehler wirft, und stellt sowohl den Fehler als auch die Rate-Limiter-Instanz bereit
 
-3. **Ausführungsverfolgung**
-Der asynchrone Rate-Limiter bietet eine umfassende Ausführungsverfolgung durch mehrere Methoden:
-- `getExecutionCount()`: Anzahl der erfolgreichen Ausführungen
-- `getRejectionCount()`: Anzahl der abgelehnten Ausführungen
-- `getRemainingInWindow()`: Anzahl der verbleibenden Ausführungen im aktuellen Fenster
-- `getMsUntilNextWindow()`: Millisekunden bis zum Start des nächsten Fensters
+Sowohl die asynchronen als auch die synchronen Rate Limiter unterstützen den Callback `onReject` für die Behandlung blockierter Ausführungen.
 
-4. **Sequenzielle Ausführung**
-Der asynchrone Rate-Limiter stellt sicher, dass nachfolgende Ausführungen warten, bis der vorherige Aufruf abgeschlossen ist, bevor sie beginnen. Dies verhindert eine nicht sequenzielle Ausführung und garantiert, dass jeder Aufruf die aktuellsten Daten verarbeitet. Dies ist besonders wichtig, wenn es um Operationen geht, die von den Ergebnissen vorheriger Aufrufe abhängen oder wenn die Datenkonsistenz kritisch ist.
+3. **Sequenzielle Ausführung**
+Da die Methode `maybeExecute` des Rate Limiters ein Promise zurückgibt, können Sie wählen, ob Sie jede Ausführung abwarten möchten, bevor Sie die nächste starten. Dies gibt Ihnen Kontrolle über die Ausführungsreihenfolge und stellt sicher, dass jeder Aufruf die aktuellsten Daten verarbeitet. Dies ist besonders nützlich, wenn Sie mit Operationen arbeiten, die von den Ergebnissen vorheriger Aufrufe abhängen, oder wenn die Aufrechterhaltung der Datenkonsistenz kritisch ist.
 
-Wenn Sie beispielsweise das Profil eines Benutzers aktualisieren und dann sofort dessen aktualisierte Daten abrufen, stellt der asynchrone Rate-Limiter sicher, dass der Abrufvorgang auf die Fertigstellung der Aktualisierung wartet, wodurch Race Conditions verhindert werden, bei denen Sie möglicherweise veraltete Daten erhalten.
+Beispielsweise, wenn Sie das Profil eines Benutzers aktualisieren und dann sofort dessen aktualisierte Daten abrufen, können Sie die Aktualisierungsoperation abwarten, bevor Sie den Abruf starten:
 
 #### Grundlegendes Anwendungsbeispiel
 
-Hier ist ein grundlegendes Beispiel, das zeigt, wie der asynchrone Rate-Limiter für eine API-Operation verwendet wird:
+Hier ein grundlegendes Beispiel, das zeigt, wie der asynchrone Rate Limiter für eine API-Operation verwendet wird:
 
 ```ts
 const rateLimitedApi = asyncRateLimit(
@@ -236,22 +264,9 @@ const rateLimitedApi = asyncRateLimit(
 const result = await rateLimitedApi('123')
 ```
 
-#### Erweiterte Muster
-
-Der asynchrone Rate-Limiter kann mit verschiedenen Mustern kombiniert werden, um komplexe Probleme zu lösen:
-
-1. **Integration der Zustandsverwaltung**
-Wenn Sie den asynchronen Rate-Limiter mit Zustandsverwaltungssystemen (wie Reacts useState oder Solids createSignal) verwenden, können Sie leistungsstarke Muster für die Handhabung von Ladezuständen, Fehlerzuständen und Datenaktualisierungen erstellen. Die Callbacks des Rate-Limiters bieten perfekte Hooks für die Aktualisierung des UI-Status basierend auf dem Erfolg oder Misserfolg von Operationen.
-
-2. **Verhinderung von Race Conditions**
-Das Ratenbegrenzungsmuster verhindert auf natürliche Weise Race Conditions in vielen Szenarien. Wenn mehrere Teile Ihrer Anwendung versuchen, dieselbe Ressource gleichzeitig zu aktualisieren, stellt der Rate-Limiter sicher, dass die Aktualisierungen innerhalb der konfigurierten Grenzen erfolgen, während dennoch Ergebnisse an alle Aufrufer zurückgegeben werden.
-
-3. **Fehlerbehebung**
-Die Fehlerbehandlungsfähigkeiten des asynchronen Rate-Limiters machen ihn ideal für die Implementierung von Wiederholungslogik und Fehlerbehebungsmustern. Sie können den `onError`-Callback verwenden, um benutzerdefinierte Fehlerbehandlungsstrategien zu implementieren, wie z. B. exponentielles Backoff oder Fallback-Mechanismen.
-
 ### Framework-Adapter
 
-Jeder Framework-Adapter bietet Hooks, die auf der Kernfunktionalität der Ratenbegrenzung aufbauen, um sich in das Zustandsverwaltungssystem des Frameworks zu integrieren. Hooks wie `createRateLimiter`, `useRateLimitedCallback`, `useRateLimitedState` oder `useRateLimitedValue` sind für jedes Framework verfügbar.
+Jeder Framework-Adapter bietet Hooks, die auf der Kernfunktionalität der Ratenbegrenzung aufbauen, um sich in das State-Management-System des Frameworks zu integrieren. Für jedes Framework sind Hooks wie `createRateLimiter`, `useRateLimitedCallback`, `useRateLimitedState` oder `useRateLimitedValue` verfügbar.
 
 Hier einige Beispiele:
 
@@ -272,7 +287,7 @@ const handleFetch = useRateLimitedCallback(
   { limit: 5, window: 1000 }
 )
 
-// Zustandsbasierter Hook für reaktive Zustandsverwaltung
+// State-basierter Hook für reaktives State-Management
 const [instantState, setInstantState] = useState('')
 const [rateLimitedValue] = useRateLimitedValue(
   instantState, // Zu begrenzender Wert
@@ -283,4 +298,6 @@ const [rateLimitedValue] = useRateLimitedValue(
 #### Solid
 
 ```tsx
-import { createRateLimiter, createRateLimitedSignal } from '@
+import { createRateLimiter, createRateLimitedSignal } from '@tanstack/solid-pacer'
+
+// Low-Level-Hook
